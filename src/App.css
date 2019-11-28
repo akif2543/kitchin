@@ -1,7 +1,3 @@
-.App {
-  text-align: center;
-}
-
 .App-logo {
   height: 40vmin;
 }
@@ -19,4 +15,113 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+nav {
+  background-color: #E67222 !important;
+}
+
+#nav-user {
+  text-align: right;
+}
+
+.jumbotron {
+  height: 92vh;
+  padding-left: 20px;
+  margin-bottom: 0px;
+  background-image: url('https://images.unsplash.com/photo-1571942676558-281b2f9b1f8d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1489&q=80');
+}
+
+.registration-form {
+  padding: 24px;
+}
+
+.registration-flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.registration-form-item {
+  flex-basis: 49%;
+}
+
+.alert {
+  display: inline-block;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  100% {
+    transform:translateY(0rem);
+    opacity: 1;
+  }
+  0% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes slideIn {
+  0% {
+    -webkit-transform: transform;
+    -webkit-opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    -webkit-opacity: 1;
+  }
+  0% {
+    -webkit-transform: translateY(1rem);
+    -webkit-opacity: 0;
+  }
+}
+
+.slideIn {
+  -webkit-animation-name: slideIn;
+  animation-name: slideIn;
+}
+
+#nav-profile-photo {
+  border-radius: 50%;
+  height: 28px;
+  width: 28px;
+  margin-right: 10px;
+}
+
+.showcase .showcase-text {
+  padding: 3rem;
+}
+
+.showcase .showcase-img {
+  min-height: 30rem;
+  background-size: cover;
+}
+
+@media (min-width: 768px) {
+  .showcase .showcase-text {
+    padding: 7rem;
+  }
+}
+
+.testimonials {
+  padding-top: 7rem;
+  padding-bottom: 7rem;
+}
+
+.testimonials .testimonial-item {
+  max-width: 18rem;
+}
+
+.testimonials .testimonial-item img {
+  max-width: 12rem;
+  box-shadow: 0px 5px 5px 0px #adb5bd;
+}
+
+footer.footer {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
