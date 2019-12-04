@@ -89,12 +89,12 @@ const Profile = () => {
           <h6 className="card-title food-title">Favorite foods:</h6>
           <span>{globalState.user.profile.favoriteFood}</span>
         </div>
-        <div class="modal fade" id="editProfile" tabindex="-1" role="dialog" aria-labelledby="editProfileLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Your Profile</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div className="modal fade" id="editProfile" tabindex="-1" role="dialog" aria-labelledby="editProfileLabel" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">Edit Your Profile</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
@@ -159,9 +159,9 @@ const Profile = () => {
                     defaultValue={globalState.user.profile.favoriteFood}
                   />
                 </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button onClick={updateProfile} type="button" class="btn btn-primary">Save changes</button>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button onClick={updateProfile} type="button" className="btn btn-primary">Save changes</button>
               </div>
             </div>
           </div>
@@ -174,7 +174,7 @@ const Profile = () => {
           <button type="button" className="btn btn-success">
             Follow
           </button>
-          <button type="button" class="btn btn-primary">
+          <button type="button" className="btn btn-primary">
             Message
           </button>
         </div>

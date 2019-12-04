@@ -129,11 +129,11 @@ const NavBar = prop => {
           </div>
         )}
         {globalState.signedIn && (
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item dropdown">
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item dropdown">
                 <a
-                  class="nav-link dropdown-toggle"
+                  className="nav-link dropdown-toggle"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -147,19 +147,18 @@ const NavBar = prop => {
                   />
                   {sessionStorage.getItem("username")}
                 </a>
-                {/*  Here's the magic. Add the .animate and .slide-in classes to your .dropdown-menu and you're all set! */}
                 <div
-                  class="dropdown-menu dropdown-menu-right animate slideIn"
+                  className="dropdown-menu dropdown-menu-right animate slideIn"
                   aria-labelledby="navbarDropdown"
                 >
-                  <a class="dropdown-item" href="#">
+                  <a className="dropdown-item" href="#">
                     Profile
                   </a>
-                  <a class="dropdown-item" href="#">
+                  <a className="dropdown-item" href="#">
                     Another action
                   </a>
-                  <div class="dropdown-divider"></div>
-                  <Link onClick={signOut} class="dropdown-item" to="/" exact>
+                  <div className="dropdown-divider"></div>
+                  <Link onClick={signOut} className="dropdown-item" to="/" exact>
                     Sign Out
                   </Link>
                 </div>

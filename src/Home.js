@@ -85,7 +85,7 @@ const Home = () => {
                 post.likes.includes(globalState.user.id) ? (
                   <FontAwesomeIcon icon={["far", "heart"]} />
                 ) : (
-                  <FontAwesomeIcon icon={["fas", "heart"]} />
+                  <FontAwesomeIcon icon={["fas", "heart"]} color={"#E67222"} />
                 )
               }
               likeStatus={
@@ -94,7 +94,7 @@ const Home = () => {
               likeCounter={post.likes.length}
               shareStatus={
                 post.shares.includes(globalState.user.id) ? (
-                  <FontAwesomeIcon icon={faShare} color="f064" />
+                  <FontAwesomeIcon icon={faShare} color={"#E67222"} />
                 ) : (
                   <FontAwesomeIcon icon={faShare} />
                 )

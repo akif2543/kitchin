@@ -165,6 +165,26 @@ footer.footer {
   background: darkgray;
 }
 
+.collapse .profile-photo {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  float: left;
+  margin-right: 1rem;
+  background: darkgray;
+}
+
+.collapse .post-username {
+  margin-bottom: 0;
+  border: 1px solid red;
+  display: inline-block;
+}
+
+.collapse .post-date {
+  color: gray;
+  margin-top: 0;
+}
+
 .card .post-username {
   margin-bottom: 0;
 }
@@ -202,6 +222,11 @@ footer.footer {
 .card button {
   background-color: none;
   border: none;
+  outline: none;
+}
+
+.post button:hover {
+  color: #E67222;
 }
 
 html, body {
