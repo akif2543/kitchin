@@ -85,11 +85,28 @@ nav {
   animation-name: slideIn;
 }
 
+nav .signin-alert {
+  padding: 6px;
+  margin: 0;
+}
+
+nav .btn-danger {
+  margin-left: 16px;
+}
+
+nav .form-group {
+  margin-left: 8px;
+}
+
 #nav-profile-photo {
   border-radius: 50%;
   height: 28px;
   width: 28px;
   margin-right: 10px;
+}
+
+#password-popover {
+  margin-left: 0.5rem;
 }
 
 .showcase .showcase-text {
@@ -124,4 +141,118 @@ nav {
 footer.footer {
   padding-top: 4rem;
   padding-bottom: 4rem;
+}
+
+.card {
+  text-align: left;
+  margin: 0 auto;
+  max-width: 600px;
+  margin-bottom: 20px;
+}
+.card .post-image {
+  background: darkgray;
+  height: auto;
+  width: 100%;
+  border-radius: 25px;
+}
+
+.card .profile-photo {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50%;
+  float: left;
+  margin-right: 1rem;
+  background: darkgray;
+}
+
+.card .post-username {
+  margin-bottom: 0;
+}
+
+.card .post-date {
+  color: gray;
+  margin-top: 0;
+}
+
+.card .post-body {
+  margin-top: 16px;
+}
+
+.card .flex-container {
+  padding-top: 10px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.card .count {
+  margin-left: 0.5rem;
+  margin-right: 1.5rem;
+}
+
+.card .recipe-title {
+  margin-top: 15px;
+  margin-bottom: 0;
+}
+
+.card .recipe-time {
+  margin-right: 10px;
+}
+
+.card button {
+  background-color: none;
+  border: none;
+}
+
+html, body {
+  height: 100%;
+}
+
+.home .page {
+  height: 100%;
+}
+
+body {
+  background: #F1F3FA;
+}
+
+.profile {
+  margin: 20px 20px;
+  float: left;
+  height: 100%;
+}
+
+.profile .photo {
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  background: darkgray;
+  margin: 10px 44px;
+  border: none;
+}
+
+.profile #city {
+  margin-right: 10px;
+}
+
+.profile #utensils {
+  margin-right: 17px;
+}
+
+.profile #briefcase {
+  margin-right: 14px;
+}
+
+.profile .bio-title {
+  margin-top: 20px;
+  display: inline-block;
+}
+
+.profile .list-group-item {
+  padding-left: 0;
+}
+
+.profile #edit {
+  display: inline-block;
+  margin-left: 10px;
 }

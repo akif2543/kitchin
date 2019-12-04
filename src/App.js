@@ -1,41 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import NavBar from "./NavBar";
+import React, { useState, useEffect, useContext } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import logo from "./logo.svg";
 import Jumbotron from "./Jumbotron";
-import RegistrationForm from "./RegistrationForm";
 import Showcase from "./Showcase";
 import Testimonials from "./Testimonials";
-import Footer from "./Footer";
-import DatePicker from "./DateTimePicker";
-import AppContext from './AppContext';
-import './App.css';
+import AppContext from "./AppContext";
 
 function App() {
-  const [globalState, setGlobalState] = useState(
-    {
-      user: {},
-      signedIn: sessionStorage.getItem('jwt') ? true : false,
-      openRegistration: false,
-    }
-  )
+  const [globalState, setGlobalState] = useContext(AppContext);
+
   return (
-    <AppContext.Provider value ={[globalState, setGlobalState]}>
-    <div className="App">
-      <NavBar />
-      <Jumbotron 
-      header="Header TK"
-      lead="Lead TK"
-      info="Text TK"
-      buttonLabel="Sign Up"
+    <div className="App" id="app">
+      <Jumbotron
+        header="Header TK"
+        lead="Lead TK"
+        info="Text TK"
+        buttonLabel="Sign Up"
       />
-      {globalState.openRegistration &&
-      <RegistrationForm />
-      }
       <Showcase />
       <Testimonials />
-      <Footer />
     </div>
-    </AppContext.Provider>
   );
 }
 
