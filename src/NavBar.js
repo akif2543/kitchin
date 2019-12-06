@@ -1,13 +1,17 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import AppContext from "./AppContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = prop => {
-  let email, password;
+  let email, password, editFirstName, editLastName, editEmail, editPassword;
 
   const [state, setState] = useState({ 
     emailError: false,
     passwordError: false,
+    errors: [],
+    accountUpdated: false
   });
 
   const [globalState, setGlobalState] = useContext(AppContext);
@@ -61,9 +65,56 @@ const NavBar = prop => {
     window.location.reload();
   };
 
+  const resetPosts = () => {
+    setGlobalState({...globalState, postsLoaded: false})
+  };
+
+  const editAccount = () => {
+    setState({...state, accountUpdated: false})
+    fetch("http://localhost:3001/user/edit", {
+      method: "POST",
+      body: JSON.stringify({
+        userId: globalState.user.id
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => response.json())
+      .then(json => {
+        editFirstName.defaultValue = json.firstName;
+        editLastName.defaultValue = json.lastName;
+        editEmail.defaultValue = json.email;
+        editPassword.defaultValue = json.password
+      })
+      .catch(e => console.log("error", e));
+  };
+
+  const updateAccount = () => {
+    fetch("http://localhost:3001/user/update", {
+      method: "POST",
+      body: JSON.stringify({
+        firstName: editFirstName.value,
+        lastName: editLastName.value,
+        email: editEmail.value,
+        password: editPassword.value,
+        _id: globalState.user.id
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => response.json())
+      .then(json => {
+        globalState.user.name = json.firstName + " " + json.lastName
+        setState({...state, accountUpdated: true});
+        sessionStorage.setItem("username", json.firstName + " " + json.lastName);
+      });
+  }
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light">
-      <Link className="navbar-brand" to="/">
+      <Link className="navbar-brand" to="/" onClick={resetPosts}>
         Kitchin
       </Link>
       <button
@@ -151,11 +202,8 @@ const NavBar = prop => {
                   className="dropdown-menu dropdown-menu-right animate slideIn"
                   aria-labelledby="navbarDropdown"
                 >
-                  <a className="dropdown-item" href="#">
-                    Profile
-                  </a>
-                  <a className="dropdown-item" href="#">
-                    Another action
+                  <a href="#" className="dropdown-item" onClick={editAccount} data-toggle="modal" data-target="#editAccount">
+                    Edit Account
                   </a>
                   <div className="dropdown-divider"></div>
                   <Link onClick={signOut} className="dropdown-item" to="/" exact>
@@ -166,6 +214,115 @@ const NavBar = prop => {
             </ul>
           </div>
         )}
+      </div>
+      <div
+        class="modal fade"
+        id="editAccount"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="editAccountLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Edit Your Account Information
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="registration-flex container">
+              <div className="registration-form-item form-group">
+                <label className="first-label">First name</label>
+                <input
+                  ref={elem => (editFirstName = elem)}
+                  type="text"
+                  className="form-control"
+                  id="firstName"
+                />
+              </div>
+              <div className="registration-form-item form-group">
+                <label className="first-label">Last name</label>
+                <input
+                  ref={elem => (editLastName = elem)}
+                  type="lastName"
+                  className="form-control"
+                  id="lastName"
+                />
+              </div>
+              <div className="registration-form-item form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input
+                  ref={elem => (editEmail = elem)}
+                  type="email"
+                  className="form-control"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                />
+              </div>
+              <div className="registration-form-item form-group">
+                <label for="exampleInputPassword1">Password<a href="#" class="tooltip-test" title="Password must be between 8 and 16 characters."><FontAwesomeIcon icon={faQuestionCircle} id="password-popover" /></a></label>
+                <input
+                  ref={elem => (editPassword = elem)}
+                  type="password"
+                  className="form-control"
+                  id="exampleInputPassword1"
+                />
+              </div>
+            </div>
+            {state.errors.length > 0 && (
+              <div className="alert alert-danger" role="alert">
+                Please correct the following errors:
+                <ul>
+                  {state.errors.map(error => (
+                    <li>{error}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {state.accountUpdated && (
+              <div className="alert alert-success" role="alert">
+                Your account has been updated!
+              </div>
+            )}
+          <div class="modal-footer">
+            {!state.accountUpdated && (
+            <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >
+            Close
+          </button>
+            )}
+            {!state.accountUpdated && (
+            <button
+              onClick={updateAccount}
+              type="button"
+              class="btn btn-primary"
+            >
+              Update
+            </button>
+            )}
+            {state.accountUpdated && (
+            <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >
+            Close
+            </button>
+            )}
+          </div>
+          </div>
+        </div>
       </div>
     </nav>
   );

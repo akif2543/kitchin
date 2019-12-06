@@ -25,7 +25,7 @@ const Footer = () => {
               </li>
             </ul>
             <p className="text-muted small mb-4 mb-lg-0">
-              &copy; Your Website 2019. All Rights Reserved.
+              &copy; Kitchin 2019. All Rights Reserved.
             </p>
           </div>
           <div className="col-lg-6 h-100 text-center text-lg-right my-auto">

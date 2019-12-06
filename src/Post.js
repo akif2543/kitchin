@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import AppContext from "./AppContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faShare } from "@fortawesome/free-solid-svg-icons";
+import { faComments } from "@fortawesome/free-regular-svg-icons";
 
 const Post = ({
   _id,
@@ -10,20 +13,22 @@ const Post = ({
   image,
   postBody,
   caption,
-  commentButton,
-  comments,
+  commentCounter,
   likeButton,
   likeStatus,
   likeCounter,
+  shareButton,
   shareStatus,
-  shares
+  shareCounter
 }) => {
   const [state, setState] = useState({
     likeButton: likeButton,
     likeStatus: likeStatus,
-    likeCounter: likeCounter,
-    shareButton: shareStatus
+    shareButton: shareButton,
+    shareStatus: shareStatus
   });
+
+  const [globalState, setGlobalState] = useContext(AppContext);
 
   const like = async () => {
     setState({
@@ -41,27 +46,28 @@ const Post = ({
       }
     });
     let json = await response.json();
-    console.log(json);
-    console.log(state.likeStatus);
-    if (!state.likeStatus) {
+    if (state.likeStatus) {
       setState({
         ...state,
         likeButton: <FontAwesomeIcon icon={["far", "heart"]} />,
-        likeStatus: true,
-        likeCounter: likeCounter
+        likeStatus: false
       });
-    } else if (state.likeStatus) {
+      setGlobalState({...globalState, postsLoaded: false});
+    } else if (!state.likeStatus) {
       setState({
         ...state,
         likeButton: <FontAwesomeIcon icon={["fas", "heart"]} color={"#E67222"} />,
-        likeStatus: false,
-        likeCounter: likeCounter
+        likeStatus: true
       });
+      setGlobalState({...globalState, postsLoaded: false});
     }
-    console.log(state.likeStatus);
   };
 
   const share = async () => {
+    setState({
+      ...state,
+      shareButton: <FontAwesomeIcon icon={faSpinner} spin />
+    });
     let response = await fetch("http://localhost:3001/feed/post/share", {
       method: "POST",
       body: JSON.stringify({
@@ -73,21 +79,20 @@ const Post = ({
       }
     });
     let json = await response.json();
-    console.log(json);
-    if (
-      state.shareButton === <FontAwesomeIcon icon={["far", "share-square"]} />
-    ) {
+    if (state.shareStatus) {
       setState({
         ...state,
-        shareButton: <FontAwesomeIcon icon={["fas", "share-square"]} color={"#E67222"} />
+        shareButton: <FontAwesomeIcon icon={faShare} />,
+        shareStatus: false
       });
-    } else if (
-      state.shareButton === <FontAwesomeIcon icon={["fas", "share-square"]} color={"#E67222"} />
-    ) {
+      setGlobalState({...globalState, postsLoaded: false});
+    } else if (!state.shareStatus) {
       setState({
         ...state,
-        shareButton: <FontAwesomeIcon icon={["far", "share-square"]} />
+        shareButton: <FontAwesomeIcon icon={faShare} color={"#E67222"} />,
+        shareStatus: true
       });
+      setGlobalState({...globalState, postsLoaded: false});
     }
   };
 
@@ -103,26 +108,25 @@ const Post = ({
           <button href="#">
             <FontAwesomeIcon icon={["far", "comment"]} />
           </button>
-          <span className="card-text count">{comments}</span>
+          <span className="card-text count">0</span>
           <button href="#" onClick={like}>
             {state.likeButton}
           </button>
-          <span className="card-text count">{state.likeCounter}</span>
+          <span className="card-text count">{likeCounter}</span>
           <button href="#" onClick={share}>
             {state.shareButton}
           </button>
-          <span className="card-text count">{shares}</span>
-          <button
-            className="btn btn-primary"
+          <span className="card-text count">{shareCounter}</span>
+        </div>
+          {/* <button
             type="button"
             data-toggle="collapse"
             data-target="#comment"
             aria-expanded="false"
             aria-controls="comment"
           >
-            Show comments
+            <FontAwesomeIcon icon={faComments} id="comments-icon" />Show comments
           </button>
-        </div>
         <div class="collapse" id="comment">
           <div className="card card-body">
             <img src={profilePhoto} className="profile-photo" />
@@ -130,7 +134,7 @@ const Post = ({
             <span className="card-text post-date">{date}</span>
             <p className="card-text post-body">{postBody}</p>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

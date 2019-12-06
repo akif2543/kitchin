@@ -2,14 +2,13 @@ import React, { useState, useEffect, useContext } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Post from "./Post";
+import NewPost from "./NewPost";
 import Profile from "./Profile";
 import Recipe from "./Recipe";
 import AppContext from "./AppContext";
 
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
-import { faShareSquare as faShareSquareSolid } from "@fortawesome/free-solid-svg-icons";
-import { faShareSquare as faShareSquareRegular } from "@fortawesome/free-regular-svg-icons";
 import { faComment as faCommentSolid } from "@fortawesome/free-solid-svg-icons";
 import { faComment as faCmmentRegular } from "@fortawesome/free-regular-svg-icons";
 import { faShare } from "@fortawesome/free-solid-svg-icons";
@@ -18,12 +17,12 @@ import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 import { faCity } from "@fortawesome/free-solid-svg-icons";
 import { faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { faComments } from "@fortawesome/free-regular-svg-icons";
 
 library.add(
   faHeartRegular,
   faHeartSolid,
-  faShareSquareSolid,
-  faShareSquareRegular,
   faCommentSolid,
   faCmmentRegular,
   faShare,
@@ -31,7 +30,9 @@ library.add(
   faBriefcase,
   faCity,
   faUtensils,
-  faUsers
+  faUsers,
+  faPen,
+  faComments
 );
 
 const Home = () => {
@@ -39,37 +40,37 @@ const Home = () => {
 
   const [state, setState] = useState({
     posts: [],
-    postsLoaded: false,
     profile: {},
-    profileLoaded: false
   });
 
   useEffect(() => {
-    if (!state.postsLoaded) {
+    if (!globalState.postsLoaded) {
       fetch("http://localhost:3001/feed/post/all")
         .then(response => response.json())
         .then(json => {
           setState({
             ...state,
             posts: json,
-            postsLoaded: true,
             loadMore: false
           });
+          setGlobalState({...globalState, postsLoaded: true});
         })
         .catch(e => console.log("error", e));
     }
   });
   
   return (
-    <div className="Home page">
+    <div className="Home flex-page">
       {globalState.signedIn && (
-        <div className="container">
+        <div className="container col-sm-3">
         <Profile />
         </div>
       )}
+      <div className="container col-sm-8 feed-container">
+      <NewPost />
       <h1>Your Feed</h1>
       {globalState.signedIn && (
-        <div className="container">
+        <div className="container post-container">
           {state.posts.map(post => (
             <Post
               _id={post._id}
@@ -80,30 +81,34 @@ const Home = () => {
               image={post.image}
               caption={post.caption}
               commentButton={<FontAwesomeIcon icon={["far", "comment"]} />}
-              comments={post.comments.length}
+              /* commentCounter={post.comments.length} */
               likeButton={
                 post.likes.includes(globalState.user.id) ? (
-                  <FontAwesomeIcon icon={["far", "heart"]} />
-                ) : (
                   <FontAwesomeIcon icon={["fas", "heart"]} color={"#E67222"} />
+                ) : (
+                  <FontAwesomeIcon icon={["far", "heart"]} />
                 )
               }
               likeStatus={
                 post.likes.includes(globalState.user.id) ? true : false
               }
               likeCounter={post.likes.length}
-              shareStatus={
+              shareButton={
                 post.shares.includes(globalState.user.id) ? (
                   <FontAwesomeIcon icon={faShare} color={"#E67222"} />
                 ) : (
                   <FontAwesomeIcon icon={faShare} />
                 )
               }
-              shares={post.shares.length}
+              shareStatus={
+                post.shares.includes(globalState.user.id) ? true : false
+              }
+              shareCounter={post.shares.length}
             />
           ))}
         </div>
       )}
+      </div>
       {/* {globalState.signedIn && (
         <div className="container">
           {state.posts.map(post => (

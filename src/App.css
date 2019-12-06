@@ -19,6 +19,10 @@
 
 nav {
   background-color: #E67222 !important;
+  position: fixed !important;
+  width: 100%;
+  z-index: 10 !important;
+  top: 0;
 }
 
 #nav-user {
@@ -26,6 +30,7 @@ nav {
 }
 
 .jumbotron {
+  margin-top: 56px;
   height: 92vh;
   padding-left: 20px;
   margin-bottom: 0px;
@@ -107,6 +112,7 @@ nav .form-group {
 
 #password-popover {
   margin-left: 0.5rem;
+  color: #E67222;
 }
 
 .showcase .showcase-text {
@@ -138,9 +144,21 @@ nav .form-group {
   box-shadow: 0px 5px 5px 0px #adb5bd;
 }
 
+footer .container {
+  top: 60px;
+}
+
 footer.footer {
   padding-top: 4rem;
   padding-bottom: 4rem;
+}
+
+footer a {
+  color: #E67222;
+}
+
+footer a:hover {
+  color: red;
 }
 
 .card {
@@ -225,16 +243,86 @@ footer.footer {
   outline: none;
 }
 
+#comments-icon {
+  margin-right: 0.5rem;
+}
+
+#edit:hover {
+  color: #E67222;
+}
+
 .post button:hover {
   color: #E67222;
+}
+
+.new-post .pp {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+  float: left;
+  margin: 0.5rem 0.5rem 0.5rem 0;
+}
+
+.new-post textarea {
+  width: 394px;
+  height: 5rem;
+  border-radius: 2px;
+  border-color: lightgray;
+  padding: 0;
+  outline: none;
+}
+
+.new-post label {
+  display: block;
+  margin-left: 4.5rem;
+  margin-bottom: 0;
+}
+
+.new-post input {
+  width: 394px;
+  margin-left: 4.5rem;
+  outline: none;
+}
+
+#editProfile input {
+  color: black;
 }
 
 html, body {
   height: 100%;
 }
 
-.home .page {
-  height: 100%;
+.flex-page {
+  display: flex;
+  justify-content: left;
+}
+
+.col-sm-4 {
+  padding: 0;
+}
+
+.feed-container {
+  top: 60px;
+  margin-bottom: 70px;
+  margin-top: 15px;
+}
+
+.landing {
+  background-color: #f8f9fa;
+}
+
+#compose-btn {
+  float: right;
+  margin-right: 225px;
+  margin-top: 5px;
+}
+
+.post-container {
+  padding-left: 0;
+}
+
+.post {
+  margin: 10px 0;
 }
 
 body {
@@ -242,9 +330,9 @@ body {
 }
 
 .profile {
-  margin: 20px 20px;
-  float: left;
+  margin: 20px;
   height: 100%;
+  top: 60px;
 }
 
 .profile .photo {
@@ -256,19 +344,19 @@ body {
   border: none;
 }
 
-.profile #city {
+.city {
   margin-right: 10px;
 }
 
-.profile #utensils {
+.utensils {
   margin-right: 17px;
 }
 
-.profile #briefcase {
+.briefcase {
   margin-right: 14px;
 }
 
-.profile .bio-title {
+.bio-title {
   margin-top: 20px;
   display: inline-block;
 }
@@ -277,7 +365,168 @@ body {
   padding-left: 0;
 }
 
-.profile #edit {
+.profile-edit {
   display: inline-block;
   margin-left: 10px;
+  margin-bottom: 1px;
+}
+
+.profile-edit:hover {
+  color: #E67222;
+}
+
+.mobile-profile {
+  top: 60px;
+  margin: 20px 0;
+  padding: 20px;
+  display: none;
+}
+
+.mobile-profile .photo {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  background: darkgray;
+  border: none;
+  float: left;
+  margin-right: 2rem;
+}
+
+.mobile-profile .card-body {
+  display: inline-block;
+  width: 100%;
+  padding: 0;
+}
+
+.mobile-profile h2 {
+  margin-bottom: 0;
+  margin-top: 12px;
+}
+
+.mobile-profile-btn {
+  background-color: none;
+  color: gray;
+  border: none;
+  outline: none;
+  padding: 0;
+}
+
+.mobile-profile-icon {
+  margin-right: 0.5rem;
+}
+
+.mobile-profile-btn:hover {
+  color: #E67222;
+}
+
+.mobile-profile .collapse {
+  margin-top: 20px;
+}
+
+.collapse .list-group-item {
+  padding-left: 0;
+}
+
+.first-label {
+  margin-top: 16px;
+}
+
+@media only screen and (max-width: 1080px) {
+  .jumbotron {
+    margin-top: 56px;
+  }
+  .profile {
+    display: none;
+  }
+  .mobile-profile {
+    display: block;
+  }
+  .col-sm-3 {
+    max-width: 100%;
+  }
+  .col-sm-4 {
+    max-width: 100%;
+  }
+  .col-sm-9 {
+    width: 100%;
+  }
+  .col-sm-8 {
+    width: 100%;
+  }
+  .flex-page {
+    display: block;
+  }
+  nav {
+    top: 0;
+  }  
+  .post {
+    width: 100% !important;
+  }
+  .post-container {
+    padding: 0;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  nav {
+    top: 0;
+  }  
+  .col-sm-3 {
+    width: 100%;
+  }
+  .col-sm-4 {
+    width: 100%;
+  }
+  .col-sm-9 {
+    width: 100%;
+  }
+  .col-sm-8 {
+    width: 100%;
+  }
+  .flex-page {
+    display: block;
+  }
+  .post {
+    width: 100% !important;
+  }
+  .post-container {
+    padding: 0;
+  }
+  .profile {
+    display: none;
+  }
+  .mobile-profile {
+    display: block;
+  }
+  #compose-btn {
+    float: right;
+    margin-right: 0;
+  }
+  .new-post .pp {
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    float: left;
+    margin: 0.5rem 0.5rem 0.5rem 0;
+  }
+  
+  .new-post textarea {
+    width: 394px;
+    height: 4rem;
+    border-radius: 2px;
+    border-color: lightgray;
+    padding: 0;
+    outline: none;
+  }
+  
+  .new-post label {
+    display: block;
+    margin-left: 3.5rem;
+    margin-bottom: 0;
+  }
+  
+  .new-post input {
+    width: 394px;
+    margin-left: 3.5rem;
+  }
 }

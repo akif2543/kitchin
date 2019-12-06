@@ -10,7 +10,8 @@ function App() {
   const [globalState, setGlobalState] = useContext(AppContext);
 
   return (
-    <div className="App" id="app">
+    <div className="App">
+      <div className="landing">
       <Jumbotron
         header="Header TK"
         lead="Lead TK"
@@ -19,6 +20,7 @@ function App() {
       />
       <Showcase />
       <Testimonials />
+    </div>
     </div>
   );
 }

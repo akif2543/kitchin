@@ -118,7 +118,7 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
             </div>
             <div className="registration-flex container">
               <div className="registration-form-item form-group">
-                <label>First name</label>
+                <label className="first-label">First name</label>
                 <input
                   ref={elem => (firstName = elem)}
                   type="text"
@@ -128,7 +128,7 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
                 />
               </div>
               <div className="registration-form-item form-group">
-                <label>Last name</label>
+                <label className="first-label">Last name</label>
                 <input
                   ref={elem => (lastName = elem)}
                   type="lastName"
@@ -202,7 +202,7 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
             <button
               onClick={registerUser}
               type="button"
-              class="btn btn-primary"
+              class="btn btn-danger"
             >
               Register
             </button>

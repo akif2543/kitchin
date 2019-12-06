@@ -11,6 +11,9 @@ const links = [
     {
       'label': 'Home',
       'path': './Home'
+    }, {
+      'label': 'About',
+      'path': './About'
     },
 ]
 
@@ -29,12 +32,13 @@ const Main = () => {
     const [globalState, setGlobalState] = useState(
         {
           user: {
-            name: sessionStorage.getItem('username'),
-            id: sessionStorage.getItem('userid'),
+            name: sessionStorage.getItem('username') ? sessionStorage.getItem('username') : null,
+            id: sessionStorage.getItem('userid') ? sessionStorage.getItem('userid') : null,
             profile: {},
         },
           signedIn: sessionStorage.getItem('jwt') ? true : false,
           profileLoaded: false,
+          postsLoaded: false,
         }
     )
 
