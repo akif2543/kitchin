@@ -7,24 +7,24 @@ const Showcase = () => {
             <div class="container-fluid p-0">
             <div class="row no-gutters">
 
-                <div class="col-lg-6 order-lg-2 text-white showcase-img" style={{backgroundImage: "url(https://images.unsplash.com/photo-1574714802271-15a6dbfdff96?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)"}}></div>
+                <div class="col-lg-6 order-lg-2 text-white showcase-img" style={{backgroundImage: "url(https://images.unsplash.com/photo-1473106235427-b7202ef5453d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80)"}}></div>
                 <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-                <h2>Fully Responsive Design</h2>
-                <p class="lead mb-0">When you use a theme created by Start Bootstrap, you know that the theme will look great on any device, whether it's a phone, tablet, or desktop the page will behave responsively!</p>
+                <h2>Asian cuisine</h2>
+                <p class="lead mb-0">Explore various Asian cuisines and learn how to recreate authentic recipes at home.</p>
                 </div>
             </div>
             <div class="row no-gutters">
-                <div class="col-lg-6 text-white showcase-img" style={{backgroundImage: "url(https://images.unsplash.com/photo-1574714802271-15a6dbfdff96?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)"}}></div>
+                <div class="col-lg-6 text-white showcase-img" style={{backgroundImage: "url(https://images.unsplash.com/photo-1514944617518-12c7891ec602?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80)"}}></div>
                 <div class="col-lg-6 my-auto showcase-text">
-                <h2>Updated For Bootstrap 4</h2>
-                <p class="lead mb-0">Newly improved, and full of great utility classes, Bootstrap 4 is leading the way in mobile responsive web development! All of the themes on Start Bootstrap are now using Bootstrap 4!</p>
+                <h2>French cuisine</h2>
+                <p class="lead mb-0">Are you new to French cuisine? Does the language intimidate you and make the recipes seem out of reach? Let's take the mystery out of French cooking and learn how to make a few classic dishes.</p>
                 </div>
             </div>
             <div class="row no-gutters">
-                <div class="col-lg-6 order-lg-2 text-white showcase-img" style={{backgroundImage: "url(https://images.unsplash.com/photo-1574714802271-15a6dbfdff96?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)"}}></div>
+                <div class="col-lg-6 order-lg-2 text-white showcase-img" style={{backgroundImage: "url(https://images.unsplash.com/photo-1542444256-164bd32f11fc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=908&q=80)"}}></div>
                 <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-                <h2>Easy to Use &amp; Customize</h2>
-                <p class="lead mb-0">Landing Page is just HTML and CSS with a splash of SCSS for users who demand some deeper customization options. Out of the box, just add your content and images, and your new landing page will be ready to go!</p>
+                <h2>Lebanese cuisine</h2>
+                <p class="lead mb-0">The Lebanese people have gathered this culinary knowledge and used it in their cuisine. Because Lebanon is a melting pot, the countries that surround it have similar cuisines.</p>
                 </div>
             </div>
             </div>

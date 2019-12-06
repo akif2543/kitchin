@@ -12,9 +12,9 @@ function App() {
   return (
     <div className="App" id="app">
       <Jumbotron
-        header="Header TK"
-        lead="Lead TK"
-        info="Text TK"
+        header="Kitchin"
+        lead="Meet. Cook. Share authentic cooking experience."
+        info="Find adventures nearby and access unique cuisines, techniques, and experiences around the world."
         buttonLabel="Sign Up"
       />
       <Showcase />
