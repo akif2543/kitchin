@@ -6,12 +6,19 @@ import Footer from "./Footer";
 import App from './App';
 import Home from './Home';
 import AppContext from './AppContext';
+import About from './About';
 
 const links = [
     {
       'label': 'Home',
       'path': './Home'
     },
+
+    {
+        'label': 'About',
+        'path': './About', 
+    }
+
 ]
 
 const LayoutRoute = ({path, component, exact}) => {
@@ -44,6 +51,7 @@ const Main = () => {
             <Switch>
                 <LayoutRoute path="/" exact component={App}></LayoutRoute>
                 <LayoutRoute path="/home" exact component={Home}></LayoutRoute>
+                <LayoutRoute path="/about" exact component={About}></LayoutRoute>
             </Switch>
         </BrowserRouter>
         </AppContext.Provider>
