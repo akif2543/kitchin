@@ -5,7 +5,7 @@ import { faPen } from "@fortawesome/free-solid-svg-icons";
 
 const NewPost = () => {
 
-    let postBody, image, postModal;
+    let postBody, image;
 
   const [state, setState] = useState({
     posted: false
@@ -41,11 +41,12 @@ const NewPost = () => {
     <div className="new-post">
       <button
         type="button"
-        className="btn btn-danger compose"
+        className="btn btn-danger compose  tooltip-test"
         id="compose-btn"
         data-toggle="modal"
         data-target="#compose-post"
         onClick={startPost}
+        title="Compose post"
       >
         <FontAwesomeIcon icon={faPen} className="post-pen" />
       </button>
@@ -74,7 +75,7 @@ const NewPost = () => {
             </div>
             {!state.posted && 
             <div className="modal-body">
-                <img src={globalState.user.profile.profilePhoto} className="pp" />
+                <img src={globalState.user.profile.profilePhoto} className="pp" alt="" />
                 <textarea ref={elem => (postBody = elem)}></textarea>
                 <label>Image URL:</label>
                 <input type="text" ref={elem => (image = elem)} placeholder="(Optional)"></input>

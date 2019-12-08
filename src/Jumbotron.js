@@ -81,18 +81,20 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
 
   return (
     <div className="jumbotron jumbotron-fluid">
+      <div className="text container">
       <h1 className="display-4">{header}</h1>
       <p className="lead">{lead}</p>
       {/* <hr className="my-4" /> */}
       <p>{info}</p>
+      {!globalState.signedIn &&
       <button
-        className="btn btn-primary btn-lg"
-        role="button"
+        className="btn btn-danger btn-lg"
         data-toggle="modal"
         data-target="#signUp"
       >
         {buttonLabel}
-      </button>
+      </button>}
+      </div>
       <div
         class="modal fade"
         id="signUp"

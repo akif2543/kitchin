@@ -36,80 +36,129 @@ library.add(
 );
 
 const Home = () => {
+
+  let timestamp, limit;
+
   const [globalState, setGlobalState] = useContext(AppContext);
 
   const [state, setState] = useState({
     posts: [],
-    profile: {},
+    loading: true,
+    loadMore: false,
+    timestamp: null
   });
+
+  const loadMore = () => {
+
+    /* if(state.posts.length > 1) {
+      // Updating global state to trigger the fetch request
+      setGlobalState({
+          ...globalState,
+          postsLoaded: false
+      });
+  } */
+    setState({...state, timestamp: state.posts.length > 0 ? state.posts[state.posts.length-1].date : null}); 
+    setGlobalState({...globalState, postsLoaded: false});
+    document.documentElement.scrollTop = 0;
+  };
 
   useEffect(() => {
     if (!globalState.postsLoaded) {
-      fetch("http://localhost:3001/feed/post/all")
+      fetch("http://localhost:3001/feed/post/all", {
+        method: 'POST',
+        body: JSON.stringify({
+          timestamp: state.timestamp, /* state.posts.length > 0 ? state.posts[ state.posts.length - 1 ].date : null */
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
         .then(response => response.json())
         .then(json => {
           setState({
             ...state,
             posts: json,
-            loadMore: false
+            loading: false
           });
-          setGlobalState({...globalState, postsLoaded: true});
+          setGlobalState({ ...globalState, postsLoaded: true });
         })
         .catch(e => console.log("error", e));
     }
   });
-  
+
+
   return (
     <div className="Home flex-page">
       {globalState.signedIn && (
         <div className="container col-sm-3">
-        <Profile />
+          <Profile />
         </div>
       )}
+      {!globalState.signedIn && (
       <div className="container col-sm-8 feed-container">
-      <NewPost />
-      <h1>Your Feed</h1>
+        <h1 id="feed-title">Sign in to View Your Feed</h1>
+        </div>)}
       {globalState.signedIn && (
-        <div className="container post-container">
-          {state.posts.map(post => (
-            <Post
-              _id={post._id}
-              profilePhoto={post.profilePhoto}
-              userName={post.userName}
-              date={post.formatDate}
-              postBody={post.postBody}
-              image={post.image}
-              caption={post.caption}
-              commentButton={<FontAwesomeIcon icon={["far", "comment"]} />}
-              /* commentCounter={post.comments.length} */
-              likeButton={
-                post.likes.includes(globalState.user.id) ? (
-                  <FontAwesomeIcon icon={["fas", "heart"]} color={"#E67222"} />
-                ) : (
-                  <FontAwesomeIcon icon={["far", "heart"]} />
-                )
-              }
-              likeStatus={
-                post.likes.includes(globalState.user.id) ? true : false
-              }
-              likeCounter={post.likes.length}
-              shareButton={
-                post.shares.includes(globalState.user.id) ? (
-                  <FontAwesomeIcon icon={faShare} color={"#E67222"} />
-                ) : (
-                  <FontAwesomeIcon icon={faShare} />
-                )
-              }
-              shareStatus={
-                post.shares.includes(globalState.user.id) ? true : false
-              }
-              shareCounter={post.shares.length}
-            />
-          ))}
-        </div>
-      )}
+      <div className="container col-sm-8 feed-container">
+        <NewPost />
+        <h1 id="feed-title">Your Feed</h1>
+        {state.loading && (
+          <div className="container-fluid loading">
+            <img src="https://image.flaticon.com/icons/png/512/18/18315.png" />
+            <p>Your feed is cooking!</p>
+          </div>
+        )}
+          <div className="container post-container">
+            {state.posts.map(post => (
+              <Post
+                _id={post._id}
+                profilePhoto={post.profilePhoto}
+                userName={post.userName}
+                date={post.formatDate}
+                postBody={post.postBody}
+                image={post.image}
+                caption={post.caption}
+                commentButton={<FontAwesomeIcon icon={["far", "comment"]} />}
+                /* commentCounter={post.comments.length} */
+                likeButton={
+                  post.likes.includes(globalState.user.id) ? (
+                    <FontAwesomeIcon
+                      icon={["fas", "heart"]}
+                      color={"#E67222"}
+                    />
+                  ) : (
+                    <FontAwesomeIcon icon={["far", "heart"]} />
+                  )
+                }
+                likeStatus={
+                  post.likes.includes(globalState.user.id) ? true : false
+                }
+                likeCounter={post.likes.length}
+                shareButton={
+                  post.shares.includes(globalState.user.id) ? (
+                    <FontAwesomeIcon icon={faShare} color={"#E67222"} />
+                  ) : (
+                    <FontAwesomeIcon icon={faShare} />
+                  )
+                }
+                shareStatus={
+                  post.shares.includes(globalState.user.id) ? true : false
+                }
+                shareCounter={post.shares.length}
+              />
+            ))}
+            {globalState.postsLoaded &&
+            <button className="btn btn-danger" onClick={loadMore} href="#feed-title" id="load-more-btn">Load More</button>}
+          </div>
       </div>
-      {/* {globalState.signedIn && (
+      )}
+    </div> 
+  );
+};
+
+export default Home;
+
+{ /* {globalState.signedIn && (
         <div className="container">
           {state.posts.map(post => (
             <Recipe
@@ -147,9 +196,4 @@ const Home = () => {
             />
           ))}
         </div>
-      )} */}
-    </div>
-  );
-};
-
-export default Home;
+            )} */}

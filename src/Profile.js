@@ -84,7 +84,7 @@ const Profile = () => {
             </li>
           </ul>
           <h5 className="card-title bio-title">Bio</h5>
-          <button data-toggle="modal" data-target="#editProfile">
+          <button className="tooltip-test" title="Edit profile" data-toggle="modal" data-target="#editProfile">
             <FontAwesomeIcon icon={faUserEdit} className="profile-edit" />
           </button>
           <p className="card-text bio">{globalState.user.profile.bio}</p>
@@ -127,9 +127,10 @@ const Profile = () => {
           </ul>
           <h5 className="card-title bio-title">Bio</h5>
           <button
-            className="mobile-profile-btn"
+            className="mobile-profile-btn tooltip-test"
             data-toggle="modal"
             data-target="#editProfile"
+            title="Edit profile"
           >
             <FontAwesomeIcon icon={faUserEdit} className="profile-edit" />
           </button>

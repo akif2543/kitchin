@@ -30,11 +30,25 @@ nav {
 }
 
 .jumbotron {
+  position: relative;
   margin-top: 56px;
   height: 92vh;
   padding-left: 20px;
   margin-bottom: 0px;
-  background-image: url('https://images.unsplash.com/photo-1571942676558-281b2f9b1f8d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1489&q=80');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url('https://images.unsplash.com/photo-1559894204-ac18b01b7b50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80');
+}
+
+/* url('https://images.unsplash.com/photo-1571942676558-281b2f9b1f8d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1489&q=80'); */
+
+.jumbotron .text {
+  position: absolute;
+  background: transparent;
+  padding: 20px;
+  bottom: 20px;
+  left: 20px; 
+  width: 400px;
 }
 
 .registration-form {
@@ -159,6 +173,30 @@ footer a {
 
 footer a:hover {
   color: red;
+}
+
+.loading {
+  position: absolute;
+  top: 150px;
+  left: 150px;
+  display: block;
+}
+
+.loading img {
+  width: 200px;
+  height: auto;
+}
+
+.loading p {
+  margin-top: 1rem;
+  margin-left: 1.5rem;
+}
+
+#load-more-btn {
+  float: right;
+  margin-right: 208px;
+  margin-top: 7px;
+  margin-bottom: 7px;
 }
 
 .card {
@@ -292,9 +330,26 @@ html, body {
   height: 100%;
 }
 
+/* .wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -60px;
+}
+.footer, .push {
+  height: 60px;
+} */
+
 .flex-page {
   display: flex;
   justify-content: left;
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+}
+
+footer {
+  bottom: 0;
 }
 
 .col-sm-4 {
@@ -305,9 +360,14 @@ html, body {
   top: 60px;
   margin-bottom: 70px;
   margin-top: 15px;
+  position: relative;
 }
 
 .landing {
+  background-color: #f8f9fa;
+}
+
+.about {
   background-color: #f8f9fa;
 }
 
@@ -431,6 +491,11 @@ body {
   margin-top: 16px;
 }
 
+.modal-content .alert {
+  margin-right: 15px;
+  margin-left: 15px;
+}
+
 @media only screen and (max-width: 1080px) {
   .jumbotron {
     margin-top: 56px;
@@ -441,6 +506,9 @@ body {
   .mobile-profile {
     display: block;
   }
+  .loading {
+    display: none;
+}
   .col-sm-3 {
     max-width: 100%;
   }
@@ -465,9 +533,26 @@ body {
   .post-container {
     padding: 0;
   }
+  .feed-container {
+    margin-bottom: 135px;
+  }
+  #load-more-btn {
+    margin-right: 185px;
+  }
 }
 
 @media only screen and (max-width: 768px) {
+  .jumbotron .text {
+    margin-right: 20px;
+    width: 90%;
+    bottom: -5px;
+  }
+
+  .jumbotron {
+   /*  background-image: url('https://images.unsplash.com/photo-1571942389762-b0502602ed4c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80'); */
+    background-size: contain;
+  }
+
   nav {
     top: 0;
   }  

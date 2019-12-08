@@ -62,7 +62,7 @@ const NavBar = prop => {
 
   const signOut = () => {
     sessionStorage.clear();
-    window.location.reload();
+    window.location.href = "/";
   };
 
   const resetPosts = () => {
@@ -133,7 +133,7 @@ const NavBar = prop => {
         <ul className="navbar-nav mr-auto">
           {prop.links.map(link => (
             <li className="nav-item">
-              <Link className="nav-link active" to={link.path}>
+              <Link className="nav-link active" to={link.path} onClick={resetPosts}>
                 {link.label}
               </Link>
             </li>
@@ -202,10 +202,10 @@ const NavBar = prop => {
                   className="dropdown-menu dropdown-menu-right animate slideIn"
                   aria-labelledby="navbarDropdown"
                 >
-                  <a href="#" className="dropdown-item" onClick={editAccount} data-toggle="modal" data-target="#editAccount">
+                  {/* <a href="#" className="dropdown-item" onClick={editAccount} data-toggle="modal" data-target="#editAccount">
                     Edit Account
                   </a>
-                  <div className="dropdown-divider"></div>
+                  <div className="dropdown-divider"></div> */}
                   <Link onClick={signOut} className="dropdown-item" to="/" exact>
                     Sign Out
                   </Link>

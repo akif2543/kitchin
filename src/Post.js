@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import AppContext from "./AppContext";
+import Comment from "./Comment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { faShare } from "@fortawesome/free-solid-svg-icons";
@@ -25,7 +26,8 @@ const Post = ({
     likeButton: likeButton,
     likeStatus: likeStatus,
     shareButton: shareButton,
-    shareStatus: shareStatus
+    shareStatus: shareStatus,
+    comments: []
   });
 
   const [globalState, setGlobalState] = useContext(AppContext);
@@ -52,14 +54,16 @@ const Post = ({
         likeButton: <FontAwesomeIcon icon={["far", "heart"]} />,
         likeStatus: false
       });
-      setGlobalState({...globalState, postsLoaded: false});
+      setGlobalState({ ...globalState, postsLoaded: false });
     } else if (!state.likeStatus) {
       setState({
         ...state,
-        likeButton: <FontAwesomeIcon icon={["fas", "heart"]} color={"#E67222"} />,
+        likeButton: (
+          <FontAwesomeIcon icon={["fas", "heart"]} color={"#E67222"} />
+        ),
         likeStatus: true
       });
-      setGlobalState({...globalState, postsLoaded: false});
+      setGlobalState({ ...globalState, postsLoaded: false });
     }
   };
 
@@ -85,15 +89,32 @@ const Post = ({
         shareButton: <FontAwesomeIcon icon={faShare} />,
         shareStatus: false
       });
-      setGlobalState({...globalState, postsLoaded: false});
+      setGlobalState({ ...globalState, postsLoaded: false });
     } else if (!state.shareStatus) {
       setState({
         ...state,
         shareButton: <FontAwesomeIcon icon={faShare} color={"#E67222"} />,
         shareStatus: true
       });
-      setGlobalState({...globalState, postsLoaded: false});
+      setGlobalState({ ...globalState, postsLoaded: false });
     }
+  };
+
+  const viewComments = async () => {
+    let response = await fetch("http://localhost:3001/feed/post/comment/view", {
+      method: "POST",
+      body: JSON.stringify({
+        postId: _id
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer ".concat(sessionStorage.getItem("jwt"))
+      }
+    });
+    let json = await response.json();
+    console.log(json);
+    setState({ ...state, comments: json});
+    console.log(state.comments);
   };
 
   return (
@@ -118,22 +139,27 @@ const Post = ({
           </button>
           <span className="card-text count">{shareCounter}</span>
         </div>
-          {/* <button
-            type="button"
-            data-toggle="collapse"
-            data-target="#comment"
-            aria-expanded="false"
-            aria-controls="comment"
-          >
-            <FontAwesomeIcon icon={faComments} id="comments-icon" />Show comments
-          </button>
+        {/* <button
+          type="button"
+          onClick={viewComments}
+          data-toggle="collapse"
+          data-target="#comment"
+          aria-expanded="false"
+          aria-controls="comment"
+        >
+          <FontAwesomeIcon icon={faComments} id="comments-icon" />
+          Show comments
+        </button>
         <div class="collapse" id="comment">
-          <div className="card card-body">
-            <img src={profilePhoto} className="profile-photo" />
-            <h6 className="card-title post-username">{userName}</h6>
-            <span className="card-text post-date">{date}</span>
-            <p className="card-text post-body">{postBody}</p>
-          </div>
+          {state.comments.map(comment => 
+            <Comment
+              _id={comment._id}
+              commentPhoto={comment.profilePhoto}
+              commentName={comment.userName}
+              date={comment.formatDate}
+              commentBody={comment.commentBody}
+            />
+          )}
         </div> */}
       </div>
     </div>
