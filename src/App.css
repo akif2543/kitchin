@@ -18,7 +18,7 @@
 }
 
 nav {
-  background-color: #E67222 !important;
+  background-color: #e67222 !important;
   position: fixed !important;
   width: 100%;
   z-index: 10 !important;
@@ -37,7 +37,7 @@ nav {
   margin-bottom: 0px;
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url('https://images.unsplash.com/photo-1559894204-ac18b01b7b50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80');
+  background-image: url("https://images.unsplash.com/photo-1559894204-ac18b01b7b50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80");
 }
 
 /* url('https://images.unsplash.com/photo-1571942676558-281b2f9b1f8d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1489&q=80'); */
@@ -47,7 +47,7 @@ nav {
   background: transparent;
   padding: 20px;
   bottom: 20px;
-  left: 20px; 
+  left: 20px;
   width: 400px;
 }
 
@@ -75,7 +75,7 @@ nav {
     opacity: 0;
   }
   100% {
-    transform:translateY(0rem);
+    transform: translateY(0rem);
     opacity: 1;
   }
   0% {
@@ -126,7 +126,7 @@ nav .form-group {
 
 #password-popover {
   margin-left: 0.5rem;
-  color: #E67222;
+  color: #e67222;
 }
 
 .showcase .showcase-text {
@@ -168,7 +168,7 @@ footer.footer {
 }
 
 footer a {
-  color: #E67222;
+  color: #e67222;
 }
 
 footer a:hover {
@@ -286,14 +286,14 @@ footer a:hover {
 }
 
 #edit:hover {
-  color: #E67222;
+  color: #e67222;
 }
 
 .post button:hover {
-  color: #E67222;
+  color: #e67222;
 }
 
-.new-post .pp {
+.modal-body .pp {
   height: 4rem;
   width: 4rem;
   border-radius: 50%;
@@ -301,7 +301,7 @@ footer a:hover {
   margin: 0.5rem 0.5rem 0.5rem 0;
 }
 
-.new-post textarea {
+.modal-body textarea {
   width: 394px;
   height: 5rem;
   border-radius: 2px;
@@ -326,7 +326,8 @@ footer a:hover {
   color: black;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -386,7 +387,7 @@ footer {
 }
 
 body {
-  background: #F1F3FA;
+  background: #f1f3fa;
 }
 
 .profile {
@@ -432,7 +433,7 @@ body {
 }
 
 .profile-edit:hover {
-  color: #E67222;
+  color: #e67222;
 }
 
 .mobile-profile {
@@ -476,7 +477,7 @@ body {
 }
 
 .mobile-profile-btn:hover {
-  color: #E67222;
+  color: #e67222;
 }
 
 .mobile-profile .collapse {
@@ -508,7 +509,7 @@ body {
   }
   .loading {
     display: none;
-}
+  }
   .col-sm-3 {
     max-width: 100%;
   }
@@ -526,7 +527,7 @@ body {
   }
   nav {
     top: 0;
-  }  
+  }
   .post {
     width: 100% !important;
   }
@@ -549,13 +550,13 @@ body {
   }
 
   .jumbotron {
-   /*  background-image: url('https://images.unsplash.com/photo-1571942389762-b0502602ed4c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80'); */
+    /*  background-image: url('https://images.unsplash.com/photo-1571942389762-b0502602ed4c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80'); */
     background-size: contain;
   }
 
   nav {
     top: 0;
-  }  
+  }
   .col-sm-3 {
     width: 100%;
   }
@@ -570,6 +571,11 @@ body {
   }
   .flex-page {
     display: block;
+  }
+  .card button {
+    background-color: transparent;
+    border: none;
+    outline: none;
   }
   .post {
     width: 100% !important;
@@ -594,7 +600,7 @@ body {
     float: left;
     margin: 0.5rem 0.5rem 0.5rem 0;
   }
-  
+
   .new-post textarea {
     width: 394px;
     height: 4rem;
@@ -603,15 +609,19 @@ body {
     padding: 0;
     outline: none;
   }
-  
+
   .new-post label {
     display: block;
     margin-left: 3.5rem;
     margin-bottom: 0;
   }
-  
+
   .new-post input {
     width: 394px;
     margin-left: 3.5rem;
+  }
+
+  #load-more-btn {
+    margin-right: 185px;
   }
 }

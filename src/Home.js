@@ -36,20 +36,16 @@ library.add(
 );
 
 const Home = () => {
-
-  let timestamp, limit;
-
   const [globalState, setGlobalState] = useContext(AppContext);
 
   const [state, setState] = useState({
     posts: [],
     loading: true,
     loadMore: false,
-    timestamp: null
+    timestamp: null,
   });
 
   const loadMore = () => {
-
     /* if(state.posts.length > 1) {
       // Updating global state to trigger the fetch request
       setGlobalState({
@@ -57,35 +53,41 @@ const Home = () => {
           postsLoaded: false
       });
   } */
-    setState({...state, timestamp: state.posts.length > 0 ? state.posts[state.posts.length-1].date : null}); 
-    setGlobalState({...globalState, postsLoaded: false});
+    setState({
+      ...state,
+      timestamp:
+        state.posts.length > 0
+          ? state.posts[state.posts.length - 1].date
+          : null,
+    });
+    setGlobalState({ ...globalState, postsLoaded: false });
     document.documentElement.scrollTop = 0;
   };
 
   useEffect(() => {
     if (!globalState.postsLoaded) {
       fetch("http://localhost:3001/feed/post/all", {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
-          timestamp: state.timestamp, /* state.posts.length > 0 ? state.posts[ state.posts.length - 1 ].date : null */
+          timestamp:
+            state.timestamp /* state.posts.length > 0 ? state.posts[ state.posts.length - 1 ].date : null */,
         }),
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       })
-        .then(response => response.json())
-        .then(json => {
+        .then((response) => response.json())
+        .then((json) => {
           setState({
             ...state,
             posts: json,
-            loading: false
+            loading: false,
           });
           setGlobalState({ ...globalState, postsLoaded: true });
         })
-        .catch(e => console.log("error", e));
+        .catch((e) => console.log("error", e));
     }
   });
-
 
   return (
     <div className="Home flex-page">
@@ -95,21 +97,22 @@ const Home = () => {
         </div>
       )}
       {!globalState.signedIn && (
-      <div className="container col-sm-8 feed-container">
-        <h1 id="feed-title">Sign in to View Your Feed</h1>
-        </div>)}
+        <div className="container col-sm-8 feed-container">
+          <h1 id="feed-title">Sign in to View Your Feed</h1>
+        </div>
+      )}
       {globalState.signedIn && (
-      <div className="container col-sm-8 feed-container">
-        <NewPost />
-        <h1 id="feed-title">Your Feed</h1>
-        {state.loading && (
-          <div className="container-fluid loading">
-            <img src="https://image.flaticon.com/icons/png/512/18/18315.png" />
-            <p>Your feed is cooking!</p>
-          </div>
-        )}
+        <div className="container col-sm-8 feed-container">
+          <NewPost />
+          <h1 id="feed-title">Your Feed</h1>
+          {state.loading && (
+            <div className="container-fluid loading">
+              <img src="https://image.flaticon.com/icons/png/512/18/18315.png" />
+              <p>Your feed is cooking!</p>
+            </div>
+          )}
           <div className="container post-container">
-            {state.posts.map(post => (
+            {state.posts.map((post) => (
               <Post
                 _id={post._id}
                 profilePhoto={post.profilePhoto}
@@ -119,7 +122,7 @@ const Home = () => {
                 image={post.image}
                 caption={post.caption}
                 commentButton={<FontAwesomeIcon icon={["far", "comment"]} />}
-                /* commentCounter={post.comments.length} */
+                comments={post.comments}
                 likeButton={
                   post.likes.includes(globalState.user.id) ? (
                     <FontAwesomeIcon
@@ -147,18 +150,27 @@ const Home = () => {
                 shareCounter={post.shares.length}
               />
             ))}
-            {globalState.postsLoaded &&
-            <button className="btn btn-danger" onClick={loadMore} href="#feed-title" id="load-more-btn">Load More</button>}
+            {globalState.postsLoaded && (
+              <button
+                className="btn btn-danger"
+                onClick={loadMore}
+                href="#feed-title"
+                id="load-more-btn"
+              >
+                Load More
+              </button>
+            )}
           </div>
-      </div>
+        </div>
       )}
-    </div> 
+    </div>
   );
 };
 
 export default Home;
 
-{ /* {globalState.signedIn && (
+{
+  /* {globalState.signedIn && (
         <div className="container">
           {state.posts.map(post => (
             <Recipe
@@ -196,4 +208,5 @@ export default Home;
             />
           ))}
         </div>
-            )} */}
+            )} */
+}

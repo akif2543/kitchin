@@ -14,7 +14,7 @@ const Profile = () => {
   const [globalState, setGlobalState] = useContext(AppContext);
 
   const [state, setState] = useState({
-    editProfile: false
+    editProfile: false,
   });
 
   const updateProfile = () => {
@@ -27,14 +27,14 @@ const Profile = () => {
         location: location.value,
         occupation: occupation.value,
         bio: bio.value,
-        favoriteFood: favFood.value
+        favoriteFood: favFood.value,
       }),
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     })
-      .then(response => response.json())
-      .then(json => {
+      .then((response) => response.json())
+      .then((json) => {
         globalState.user.profile = json;
         globalState.profileLoaded = false;
         sessionStorage.setItem("profilePhoto", json.profilePhoto);
@@ -43,21 +43,13 @@ const Profile = () => {
   };
 
   if (!globalState.profileLoaded) {
-    fetch("http://localhost:3001/user/profile/view", {
-      method: "POST",
-      body: JSON.stringify({
-        userId: globalState.user.id
-      }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response => response.json())
-      .then(json => {
+    fetch(`http://localhost:3001/user/${globalState.user.id}/profile`)
+      .then((response) => response.json())
+      .then((json) => {
         globalState.user.profile = json;
         globalState.profileLoaded = true;
       })
-      .catch(e => console.log("error", e));
+      .catch((e) => console.log("error", e));
   }
 
   return (
@@ -84,7 +76,12 @@ const Profile = () => {
             </li>
           </ul>
           <h5 className="card-title bio-title">Bio</h5>
-          <button className="tooltip-test" title="Edit profile" data-toggle="modal" data-target="#editProfile">
+          <button
+            className="tooltip-test"
+            title="Edit profile"
+            data-toggle="modal"
+            data-target="#editProfile"
+          >
             <FontAwesomeIcon icon={faUserEdit} className="profile-edit" />
           </button>
           <p className="card-text bio">{globalState.user.profile.bio}</p>
@@ -166,7 +163,7 @@ const Profile = () => {
               <div className="registration-form-item form-group">
                 <label className="first-label">Profile Photo</label>
                 <input
-                  ref={elem => (profilePhoto = elem)}
+                  ref={(elem) => (profilePhoto = elem)}
                   type="text"
                   className="form-control"
                   id="edit-profile-photo"
@@ -176,7 +173,7 @@ const Profile = () => {
               <div className="registration-form-item form-group">
                 <label>Cuisine</label>
                 <input
-                  ref={elem => (cuisine = elem)}
+                  ref={(elem) => (cuisine = elem)}
                   type="text"
                   className="form-control"
                   id="cuisine"
@@ -186,7 +183,7 @@ const Profile = () => {
               <div className="registration-form-item form-group">
                 <label>Location</label>
                 <input
-                  ref={elem => (location = elem)}
+                  ref={(elem) => (location = elem)}
                   type="text"
                   className="form-control"
                   id="location"
@@ -196,7 +193,7 @@ const Profile = () => {
               <div className="registration-form-item form-group">
                 <label>Occupation</label>
                 <input
-                  ref={elem => (occupation = elem)}
+                  ref={(elem) => (occupation = elem)}
                   type="text"
                   className="form-control"
                   id="occupation"
@@ -206,7 +203,7 @@ const Profile = () => {
               <div className="registration-form-item form-group">
                 <label>Bio</label>
                 <input
-                  ref={elem => (bio = elem)}
+                  ref={(elem) => (bio = elem)}
                   type="text"
                   className="form-control"
                   id="bio"
@@ -216,7 +213,7 @@ const Profile = () => {
               <div className="registration-form-item form-group">
                 <label>Favorite Food</label>
                 <input
-                  ref={elem => (favFood = elem)}
+                  ref={(elem) => (favFood = elem)}
                   type="text"
                   className="form-control"
                   id="fav-food"
