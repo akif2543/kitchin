@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import AppContext from "./AppContext";
 import Comment from "./Comment";
 import NewComment from "./NewComment";
+import FeedAPI from "./api/FeedAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { faShare } from "@fortawesome/free-solid-svg-icons";
@@ -38,39 +39,32 @@ const Post = ({
     setState({ ...state, commentsOpen: state.commentsOpen ? false : true });
   };
 
-  const like = async () => {
+  const like = () => {
     setState({
       ...state,
       likeButton: <FontAwesomeIcon icon={faSpinner} spin />,
     });
-    let response = await fetch("http://localhost:3001/feed/post/like", {
-      method: "POST",
-      body: JSON.stringify({
-        postid: _id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer ".concat(sessionStorage.getItem("jwt")),
-      },
-    });
-    let json = await response.json();
-    if (state.likeStatus) {
-      setState({
-        ...state,
-        likeButton: <FontAwesomeIcon icon={["far", "heart"]} />,
-        likeStatus: false,
-      });
-      setGlobalState({ ...globalState, postsLoaded: false });
-    } else if (!state.likeStatus) {
-      setState({
-        ...state,
-        likeButton: (
-          <FontAwesomeIcon icon={["fas", "heart"]} color={"#E67222"} />
-        ),
-        likeStatus: true,
-      });
-      setGlobalState({ ...globalState, postsLoaded: false });
-    }
+    FeedAPI.postToggleable(_id, true)
+      .then(() => {
+        if (state.likeStatus) {
+          setState({
+            ...state,
+            likeButton: <FontAwesomeIcon icon={["far", "heart"]} />,
+            likeStatus: false,
+          });
+          setGlobalState({ ...globalState, postsLoaded: false });
+        } else if (!state.likeStatus) {
+          setState({
+            ...state,
+            likeButton: (
+              <FontAwesomeIcon icon={["fas", "heart"]} color={"#E67222"} />
+            ),
+            likeStatus: true,
+          });
+          setGlobalState({ ...globalState, postsLoaded: false });
+        }
+      })
+      .catch((e) => console.log("error", e));
   };
 
   const share = async () => {
@@ -78,32 +72,25 @@ const Post = ({
       ...state,
       shareButton: <FontAwesomeIcon icon={faSpinner} spin />,
     });
-    let response = await fetch("http://localhost:3001/feed/post/share", {
-      method: "POST",
-      body: JSON.stringify({
-        postid: _id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer ".concat(sessionStorage.getItem("jwt")),
-      },
-    });
-    let json = await response.json();
-    if (state.shareStatus) {
-      setState({
-        ...state,
-        shareButton: <FontAwesomeIcon icon={faShare} />,
-        shareStatus: false,
-      });
-      setGlobalState({ ...globalState, postsLoaded: false });
-    } else if (!state.shareStatus) {
-      setState({
-        ...state,
-        shareButton: <FontAwesomeIcon icon={faShare} color={"#E67222"} />,
-        shareStatus: true,
-      });
-      setGlobalState({ ...globalState, postsLoaded: false });
-    }
+    FeedAPI.postToggleable(_id, false)
+      .then(() => {
+        if (state.shareStatus) {
+          setState({
+            ...state,
+            shareButton: <FontAwesomeIcon icon={faShare} />,
+            shareStatus: false,
+          });
+          setGlobalState({ ...globalState, postsLoaded: false });
+        } else if (!state.shareStatus) {
+          setState({
+            ...state,
+            shareButton: <FontAwesomeIcon icon={faShare} color={"#E67222"} />,
+            shareStatus: true,
+          });
+          setGlobalState({ ...globalState, postsLoaded: false });
+        }
+      })
+      .catch((e) => console.log("error", e));
   };
 
   return (
@@ -146,12 +133,12 @@ const Post = ({
         <div class="collapse" id={`comments-${_id.slice(_id.length - 5)}`}>
           {comments.map((comment) => (
             <Comment
-              _id={comment._id}
+              key={comment._id}
               user={comment.userId}
-              profile={comment.userProfileId}
               date={comment.date}
               body={comment.body}
               likes={comments.likes}
+              show={state.commentsOpen}
             />
           ))}
         </div>

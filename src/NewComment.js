@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import AppContext from "./AppContext";
+import FeedAPI from "./api/FeedAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const NewComment = ({ postId }) => {
@@ -28,20 +29,9 @@ const NewComment = ({ postId }) => {
 
   const handleSubmit = async () => {
     if (validComment()) {
-      let response = await fetch(
-        `http://localhost:3001/feed/post/${postId}/comment`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            body: commentBody.value,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer ".concat(sessionStorage.getItem("jwt")),
-          },
-        }
+      FeedAPI.addComment(postId, commentBody.value).catch((err) =>
+        console.log("error", err)
       );
-      response = await response.json();
       handleClose();
     } else {
       setState({ ...state, errors: true });

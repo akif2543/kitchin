@@ -1,63 +1,50 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import AppContext from "./AppContext";
+import UserAPI from "./api/UserAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 
-const NavBar = prop => {
+const NavBar = (prop) => {
   let email, password, editFirstName, editLastName, editEmail, editPassword;
 
-  const [state, setState] = useState({ 
+  const [state, setState] = useState({
     emailError: false,
     passwordError: false,
     errors: [],
-    accountUpdated: false
+    accountUpdated: false,
   });
 
   const [globalState, setGlobalState] = useContext(AppContext);
 
   const signIn = () => {
-    setState({...state, emailError: false, passwordError: false,});
-    fetch("http://localhost:3001/user/login", {
-      method: "POST",
-      body: JSON.stringify({
-        email: email.value,
-        password: password.value
-      }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response => response.json())
-      .then(json => {
-        if (json.token) {
-          setState({ ...state, error: false });
-          setGlobalState({ ...globalState, signedIn: true });
-          sessionStorage.setItem("jwt", json.token);
-          sessionStorage.setItem("userid", json.id);
-          sessionStorage.setItem("username", json.userName);
-          fetch("http://localhost:3001/user/profile/view", {
-            method: "POST",
-            body: JSON.stringify({
-              userId: sessionStorage.getItem("userid")
-            }),
-            headers: {
-              "Content-Type": "application/json"
-            }
+    setState({ ...state, emailError: false, passwordError: false });
+    const userData = {
+      email: email.value,
+      password: password.value,
+    };
+
+    UserAPI.login(userData).then((json) => {
+      if (json.token) {
+        setState({ ...state, error: false });
+        setGlobalState({ ...globalState, signedIn: true });
+        sessionStorage.setItem("jwt", json.token);
+        sessionStorage.setItem("userid", json.id);
+        sessionStorage.setItem("username", json.userName);
+        UserAPI.getProfile(json.id)
+          .then((json) => {
+            globalState.user.profile = json;
+            globalState.profileLoaded = true;
+            sessionStorage.setItem("profilePhoto", json.profilePhoto);
+            window.location.href = "/home";
           })
-            .then(response => response.json())
-            .then(json => {
-              globalState.user.profile = json;
-              globalState.profileLoaded = true;
-              sessionStorage.setItem("profilePhoto", json.profilePhoto);
-              window.location.href = "/home";
-            })
-            .catch(e => console.log("error", e));
-        } else if (json.email) {
-          setState({ ...state, emailError: true, passwordError: false });
-        } else if (json.password) {
-          setState({ ...state, passwordError: true, emailError: false });
-      }});
+          .catch((e) => console.log("error", e));
+      } else if (json.email) {
+        setState({ ...state, emailError: true, passwordError: false });
+      } else if (json.password) {
+        setState({ ...state, passwordError: true, emailError: false });
+      }
+    });
   };
 
   const signOut = () => {
@@ -66,51 +53,37 @@ const NavBar = prop => {
   };
 
   const resetPosts = () => {
-    setGlobalState({...globalState, postsLoaded: false})
+    setGlobalState({ ...globalState, postsLoaded: false });
   };
 
   const editAccount = () => {
-    setState({...state, accountUpdated: false})
-    fetch("http://localhost:3001/user/edit", {
-      method: "POST",
-      body: JSON.stringify({
-        userId: globalState.user.id
-      }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response => response.json())
-      .then(json => {
+    setState({ ...state, accountUpdated: false });
+    UserAPI.getInfo(globalState.user.id)
+      .then((json) => {
         editFirstName.defaultValue = json.firstName;
         editLastName.defaultValue = json.lastName;
         editEmail.defaultValue = json.email;
-        editPassword.defaultValue = json.password
       })
-      .catch(e => console.log("error", e));
+      .catch((e) => console.log("error", e));
   };
 
   const updateAccount = () => {
-    fetch("http://localhost:3001/user/update", {
-      method: "POST",
-      body: JSON.stringify({
-        firstName: editFirstName.value,
-        lastName: editLastName.value,
-        email: editEmail.value,
-        password: editPassword.value,
-        _id: globalState.user.id
-      }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response => response.json())
-      .then(json => {
-        globalState.user.name = json.firstName + " " + json.lastName
-        setState({...state, accountUpdated: true});
-        sessionStorage.setItem("username", json.firstName + " " + json.lastName);
+    const userData = {
+      firstName: editFirstName.value,
+      lastName: editLastName.value,
+      email: editEmail.value,
+      password: editPassword.value,
+    };
+    UserAPI.updateInfo(globalState.user.id, userData)
+      .then((json) => {
+        globalState.user.name = json.userName;
+        setState({ ...state, accountUpdated: true });
+        sessionStorage.setItem("username", globalState.user.name);
+      })
+      .catch((err) => {
+        console.log("error", err);
       });
-  }
+  };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light">
@@ -131,9 +104,14 @@ const NavBar = prop => {
 
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
-          {prop.links.map(link => (
+          {prop.links.map((link, i) => (
             <li className="nav-item">
-              <Link className="nav-link active" to={link.path} onClick={resetPosts}>
+              <Link
+                key={i}
+                className="nav-link active"
+                to={link.path}
+                onClick={resetPosts}
+              >
                 {link.label}
               </Link>
             </li>
@@ -141,19 +119,19 @@ const NavBar = prop => {
         </ul>
         {!globalState.signedIn && (
           <div className="form-inline my-2 my-lg-0">
-             {state.emailError && (
-          <div className="alert alert-danger signin-alert" role="alert">
-            Please enter a valid email.
-          </div>
-        )}
-        {state.passwordError && (
-          <div className="alert alert-danger signin-alert" role="alert">
-            Email and password do not match.
-          </div>
-        )}
+            {state.emailError && (
+              <div className="alert alert-danger signin-alert" role="alert">
+                Please enter a valid email.
+              </div>
+            )}
+            {state.passwordError && (
+              <div className="alert alert-danger signin-alert" role="alert">
+                Email and password do not match.
+              </div>
+            )}
             <div className="form-group">
               <input
-                ref={elem => (email = elem)}
+                ref={(elem) => (email = elem)}
                 type="email"
                 className="form-control"
                 id="signInEmail"
@@ -163,7 +141,7 @@ const NavBar = prop => {
             </div>
             <div className="form-group">
               <input
-                ref={elem => (password = elem)}
+                ref={(elem) => (password = elem)}
                 type="password"
                 className="form-control"
                 id="signInPassword"
@@ -206,7 +184,12 @@ const NavBar = prop => {
                     Edit Account
                   </a>
                   <div className="dropdown-divider"></div> */}
-                  <Link onClick={signOut} className="dropdown-item" to="/" exact>
+                  <Link
+                    onClick={signOut}
+                    className="dropdown-item"
+                    to="/"
+                    exact
+                  >
                     Sign Out
                   </Link>
                 </div>
@@ -242,7 +225,7 @@ const NavBar = prop => {
               <div className="registration-form-item form-group">
                 <label className="first-label">First name</label>
                 <input
-                  ref={elem => (editFirstName = elem)}
+                  ref={(elem) => (editFirstName = elem)}
                   type="text"
                   className="form-control"
                   id="firstName"
@@ -251,7 +234,7 @@ const NavBar = prop => {
               <div className="registration-form-item form-group">
                 <label className="first-label">Last name</label>
                 <input
-                  ref={elem => (editLastName = elem)}
+                  ref={(elem) => (editLastName = elem)}
                   type="lastName"
                   className="form-control"
                   id="lastName"
@@ -260,7 +243,7 @@ const NavBar = prop => {
               <div className="registration-form-item form-group">
                 <label for="exampleInputEmail1">Email address</label>
                 <input
-                  ref={elem => (editEmail = elem)}
+                  ref={(elem) => (editEmail = elem)}
                   type="email"
                   className="form-control"
                   id="exampleInputEmail1"
@@ -268,9 +251,21 @@ const NavBar = prop => {
                 />
               </div>
               <div className="registration-form-item form-group">
-                <label for="exampleInputPassword1">Password<a href="#" class="tooltip-test" title="Password must be between 8 and 16 characters."><FontAwesomeIcon icon={faQuestionCircle} id="password-popover" /></a></label>
+                <label for="exampleInputPassword1">
+                  Password
+                  <a
+                    href="#"
+                    class="tooltip-test"
+                    title="Password must be between 8 and 16 characters."
+                  >
+                    <FontAwesomeIcon
+                      icon={faQuestionCircle}
+                      id="password-popover"
+                    />
+                  </a>
+                </label>
                 <input
-                  ref={elem => (editPassword = elem)}
+                  ref={(elem) => (editPassword = elem)}
                   type="password"
                   className="form-control"
                   id="exampleInputPassword1"
@@ -281,7 +276,7 @@ const NavBar = prop => {
               <div className="alert alert-danger" role="alert">
                 Please correct the following errors:
                 <ul>
-                  {state.errors.map(error => (
+                  {state.errors.map((error) => (
                     <li>{error}</li>
                   ))}
                 </ul>
@@ -292,35 +287,35 @@ const NavBar = prop => {
                 Your account has been updated!
               </div>
             )}
-          <div class="modal-footer">
-            {!state.accountUpdated && (
-            <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-          >
-            Close
-          </button>
-            )}
-            {!state.accountUpdated && (
-            <button
-              onClick={updateAccount}
-              type="button"
-              class="btn btn-primary"
-            >
-              Update
-            </button>
-            )}
-            {state.accountUpdated && (
-            <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-          >
-            Close
-            </button>
-            )}
-          </div>
+            <div class="modal-footer">
+              {!state.accountUpdated && (
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+              )}
+              {!state.accountUpdated && (
+                <button
+                  onClick={updateAccount}
+                  type="button"
+                  class="btn btn-primary"
+                >
+                  Update
+                </button>
+              )}
+              {state.accountUpdated && (
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

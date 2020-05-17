@@ -1,12 +1,13 @@
 import React, { useState, useContext } from "react";
 import AppContext from "./AppContext";
+import UserAPI from "./api/UserAPI";
 
 const RegistrationForm = () => {
   let firstName, lastName, email, password, termsConditions;
 
   const [state, setState] = useState({
     errors: [],
-    registrationSuccess: false
+    registrationSuccess: false,
   });
 
   const [globalState, setGlobalState] = useContext(AppContext);
@@ -41,39 +42,19 @@ const RegistrationForm = () => {
 
   const registerUser = () => {
     if (validateForm().length === 0) {
-      // Configure fetch and post data to amingo
-      fetch("http://localhost:3001/user/register", {
-        method: "POST",
-        body: JSON.stringify({
-          firstName: firstName.value,
-          lastName: lastName.value,
-          email: email.value,
-          password: password.value
-        }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        // Convert response to json
-        .then(response => response.json())
-        // Handle the json data
-        .then(json => {
-          setState({ ...state, errors: [], registrationSuccess: true });
-          setGlobalState({ ...globalState, openRegistration: false });
-          fetch("http://localhost:3001/user/profile", {
-            method: "POST",
-            body: JSON.stringify({
-              userId: json.id
-            }),
-            headers: {
-              "Content-Type": "application/json"
-            }
-          })
-          .then(response => response.json())
-          .then(json=>{
-            sessionStorage.setItem('profilePhoto', json.profilePhoto);
-          });
+      const userData = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        email: email.value,
+        password: password.value,
+      };
+      UserAPI.register(userData).then((json) => {
+        setState({ ...state, errors: [], registrationSuccess: true });
+        setGlobalState({ ...globalState, openRegistration: false });
+        UserAPI.createProfile(json._id).then((json) => {
+          sessionStorage.setItem("profilePhoto", json.profilePhoto);
         });
+      });
     }
   };
 
@@ -84,7 +65,7 @@ const RegistrationForm = () => {
         <div className="registration-form-item form-group">
           <label>First name</label>
           <input
-            ref={elem => (firstName = elem)}
+            ref={(elem) => (firstName = elem)}
             type="text"
             className="form-control"
             id="firstName"
@@ -94,7 +75,7 @@ const RegistrationForm = () => {
         <div className="registration-form-item form-group">
           <label>Last name</label>
           <input
-            ref={elem => (lastName = elem)}
+            ref={(elem) => (lastName = elem)}
             type="lastName"
             className="form-control"
             id="lastName"
@@ -104,7 +85,7 @@ const RegistrationForm = () => {
         <div className="registration-form-item form-group">
           <label for="exampleInputEmail1">Email address</label>
           <input
-            ref={elem => (email = elem)}
+            ref={(elem) => (email = elem)}
             type="email"
             className="form-control"
             id="exampleInputEmail1"
@@ -118,7 +99,7 @@ const RegistrationForm = () => {
         <div className="registration-form-item form-group">
           <label for="exampleInputPassword1">Password</label>
           <input
-            ref={elem => (password = elem)}
+            ref={(elem) => (password = elem)}
             type="password"
             className="form-control"
             id="exampleInputPassword1"
@@ -127,7 +108,7 @@ const RegistrationForm = () => {
         </div>
         <div className="registration-form-item form-group form-check">
           <input
-            ref={elem => (termsConditions = elem)}
+            ref={(elem) => (termsConditions = elem)}
             type="checkbox"
             className="form-check-input"
             id="exampleCheck1"
@@ -150,7 +131,7 @@ const RegistrationForm = () => {
         <div className="alert alert-danger" role="alert">
           Please correct the following errors:
           <ul>
-            {state.errors.map(error => (
+            {state.errors.map((error) => (
               <li>{error}</li>
             ))}
           </ul>

@@ -1,12 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 import { faCity } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { faUsers } from "@fortawesome/free-solid-svg-icons";
+// import { faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faUserEdit } from "@fortawesome/free-solid-svg-icons";
 import AppContext from "./AppContext";
+import UserAPI from "./api/UserAPI";
 
 const Profile = () => {
   let cuisine, location, profilePhoto, occupation, bio, favFood;
@@ -18,39 +19,36 @@ const Profile = () => {
   });
 
   const updateProfile = () => {
-    fetch("http://localhost:3001/user/profile/update", {
-      method: "POST",
-      body: JSON.stringify({
-        userId: globalState.user.id,
-        profilePhoto: profilePhoto.value,
-        cuisine: cuisine.value,
-        location: location.value,
-        occupation: occupation.value,
-        bio: bio.value,
-        favoriteFood: favFood.value,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
+    const profileData = {
+      profilePhoto: profilePhoto.value,
+      cuisine: cuisine.value,
+      location: location.value,
+      occupation: occupation.value,
+      bio: bio.value,
+      favoriteFood: favFood.value,
+    };
+    UserAPI.updateProfile(globalState.user.id, profileData)
       .then((json) => {
         globalState.user.profile = json;
         globalState.profileLoaded = false;
         sessionStorage.setItem("profilePhoto", json.profilePhoto);
         window.location.reload();
-      });
-  };
-
-  if (!globalState.profileLoaded) {
-    fetch(`http://localhost:3001/user/${globalState.user.id}/profile`)
-      .then((response) => response.json())
-      .then((json) => {
-        globalState.user.profile = json;
-        globalState.profileLoaded = true;
       })
       .catch((e) => console.log("error", e));
-  }
+  };
+
+  useEffect(() => {
+    if (!globalState.profileLoaded) {
+      UserAPI.getProfile(globalState.user.id)
+        .then((json) => {
+          globalState.user.profile = json;
+        })
+        .catch((e) => console.log("error", e));
+    }
+    return () => {
+      setGlobalState({ ...globalState, profileLoaded: true });
+    };
+  }, [globalState.profileLoaded]);
 
   return (
     <div className="col-sm-4">
@@ -89,7 +87,7 @@ const Profile = () => {
           <span>{globalState.user.profile.favoriteFood}</span>
         </div>
       </div>
-      <div className="card mobile-profile" style={{ width: "18rem;" }}>
+      <div className="card mobile-profile" style={{ width: "18rem" }}>
         <div className="card-body">
           <img
             src={globalState.user.profile.profilePhoto}

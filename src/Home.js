@@ -4,8 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Post from "./Post";
 import NewPost from "./NewPost";
 import Profile from "./Profile";
-import Recipe from "./Recipe";
+// import Recipe from "./Recipe";
 import AppContext from "./AppContext";
+import FeedAPI from "./api/FeedAPI";
 
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
@@ -66,17 +67,7 @@ const Home = () => {
 
   useEffect(() => {
     if (!globalState.postsLoaded) {
-      fetch("http://localhost:3001/feed/post/all", {
-        method: "POST",
-        body: JSON.stringify({
-          timestamp:
-            state.timestamp /* state.posts.length > 0 ? state.posts[ state.posts.length - 1 ].date : null */,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
+      FeedAPI.getPosts(state.timestamp)
         .then((json) => {
           setState({
             ...state,
@@ -114,6 +105,7 @@ const Home = () => {
           <div className="container post-container">
             {state.posts.map((post) => (
               <Post
+                key={post._id}
                 _id={post._id}
                 profilePhoto={post.profilePhoto}
                 userName={post.userName}

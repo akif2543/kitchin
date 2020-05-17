@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import AppContext from "./AppContext";
+import UserAPI from "./api/UserAPI";
 
-const Comment = ({ _id, user, profile, date, body, likes }) => {
+const Comment = ({ user, date, body, likes, show }) => {
   const [state, setState] = useState({
     loaded: false,
     userName: null,
@@ -10,28 +10,24 @@ const Comment = ({ _id, user, profile, date, body, likes }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`http://localhost:3001/user/${user}`);
-      const name = await res.json();
-
-      const profileRes = await fetch(
-        `http://localhost:3001/user/${profile}/profile`
-      );
-      const photo = await profileRes.json().profilePhoto;
+      const name = await UserAPI.getInfo(user, "userName");
+      const photo = await UserAPI.getProfile(user, "profilePhoto");
 
       setState({
         ...state,
+        loaded: true,
         userName: name,
         profilePhoto: photo,
       });
     };
 
-    if (!state.loaded) {
+    if (!state.loaded && show) {
       fetchData();
     }
     return () => {
       setState({ ...state, loaded: true });
     };
-  }, [state.loaded]);
+  }, [state.loaded, show]);
 
   return (
     <div className="card card-body comment">
