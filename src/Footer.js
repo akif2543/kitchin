@@ -1,13 +1,12 @@
-import React, { useContext } from "react";
-import AppContext from "./AppContext";
+import React from "react";
+// import AppContext from "./context/AppContext";
 import { Link } from "react-router-dom";
 
 const Footer = (prop) => {
-
-  const [globalState, setGlobalState] = useContext(AppContext);
+  // const [globalState, dispatch] = useContext(AppContext);
 
   const resetPosts = () => {
-    setGlobalState({...globalState, postsLoaded: false})
+    // setGlobalState({ ...globalState, postsLoaded: false });
   };
 
   return (
@@ -16,11 +15,13 @@ const Footer = (prop) => {
         <div className="row">
           <div className="col-lg-6 h-100 text-center text-lg-left my-auto">
             <ul className="list-inline mb-2">
-            {prop.links.map(link => (
-              <li className="list-inline-item">
-                <Link to={link.path} onClick={resetPosts}>{link.label}</Link>
-              </li>
-            ))}
+              {prop.links.map((link, i) => (
+                <li className="list-inline-item" key={i}>
+                  <Link to={link.path} onClick={resetPosts}>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
             <p className="text-muted small mb-4 mb-lg-0">
               &copy; Kitchin 2019. All Rights Reserved.

@@ -1,52 +1,39 @@
-import React, { useState, useEffect, useContext } from "react";
-import { library } from "@fortawesome/fontawesome-svg-core";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import Post from "./Post";
 import NewPost from "./NewPost";
 import Profile from "./Profile";
 // import Recipe from "./Recipe";
-import AppContext from "./AppContext";
-import FeedAPI from "./api/FeedAPI";
-
-import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
-import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
-import { faComment as faCommentSolid } from "@fortawesome/free-solid-svg-icons";
-import { faComment as faCmmentRegular } from "@fortawesome/free-regular-svg-icons";
-import { faShare } from "@fortawesome/free-solid-svg-icons";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
-import { faCity } from "@fortawesome/free-solid-svg-icons";
-import { faUtensils } from "@fortawesome/free-solid-svg-icons";
-import { faUsers } from "@fortawesome/free-solid-svg-icons";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
-import { faComments } from "@fortawesome/free-regular-svg-icons";
-
-library.add(
-  faHeartRegular,
-  faHeartSolid,
-  faCommentSolid,
-  faCmmentRegular,
-  faShare,
-  faSpinner,
-  faBriefcase,
-  faCity,
-  faUtensils,
-  faUsers,
-  faPen,
-  faComments
-);
+// import AppContext from "./context/AppContext";
+import { fetchFeed } from "./context/actions";
 
 const Home = () => {
-  const [globalState, setGlobalState] = useContext(AppContext);
+  const dispatch = useDispatch();
 
-  const [state, setState] = useState({
-    posts: [],
-    loading: true,
-    loadMore: false,
-    timestamp: null,
+  const user = useSelector((store) => store.user);
+
+  const posts = useSelector((store) => {
+    return Object.keys(store.feed.posts).map(
+      (postId) => store.feed.posts[postId]
+    );
   });
 
+  const timestamp = useSelector((store) => store.feed.timestamp);
+  const loading = useSelector((store) => store.feed.loading);
+
+  // const [globalState, dispatch] = useContext(AppContext);
+
+  // const [state, setState] = useState({
+  //   posts: [],
+  //   loading: true,
+  //   loadMore: false,
+  //   timestamp: null,
+  // });
+
   const loadMore = () => {
+    // dispatch({ type: LOADING });
     /* if(state.posts.length > 1) {
       // Updating global state to trigger the fetch request
       setGlobalState({
@@ -54,56 +41,54 @@ const Home = () => {
           postsLoaded: false
       });
   } */
-    setState({
-      ...state,
-      timestamp:
-        state.posts.length > 0
-          ? state.posts[state.posts.length - 1].date
-          : null,
-    });
-    setGlobalState({ ...globalState, postsLoaded: false });
-    document.documentElement.scrollTop = 0;
+    // setState({
+    //   ...state,
+    //   timestamp:
+    //     state.posts.length > 0
+    //       ? state.posts[state.posts.length - 1].date
+    //       : null,
+    // });
+    // setGlobalState({ ...globalState, postsLoaded: false });
+    // document.documentElement.scrollTop = 0;
   };
 
   useEffect(() => {
-    if (!globalState.postsLoaded) {
-      FeedAPI.getPosts(state.timestamp)
-        .then((json) => {
-          setState({
-            ...state,
-            posts: json,
-            loading: false,
-          });
-          setGlobalState({ ...globalState, postsLoaded: true });
-        })
-        .catch((e) => console.log("error", e));
-    }
-  });
+    dispatch(fetchFeed(timestamp));
+
+    // if (globalState.feed.loading) {
+    //   FeedAPI.getPosts(globalState.feed.timestamp)
+    //     .then((posts) => dispatch({ type: LOAD_FEED, posts: posts }))
+    //     .catch((e) => console.log("error", e));
+    // }
+  }, []);
 
   return (
     <div className="Home flex-page">
-      {globalState.signedIn && (
+      {user.name && (
         <div className="container col-sm-3">
           <Profile />
         </div>
       )}
-      {!globalState.signedIn && (
+      {!user.name && (
         <div className="container col-sm-8 feed-container">
           <h1 id="feed-title">Sign in to View Your Feed</h1>
         </div>
       )}
-      {globalState.signedIn && (
+      {user.name && (
         <div className="container col-sm-8 feed-container">
           <NewPost />
           <h1 id="feed-title">Your Feed</h1>
-          {state.loading && (
+          {loading && (
             <div className="container-fluid loading">
-              <img src="https://image.flaticon.com/icons/png/512/18/18315.png" />
+              <img
+                src="https://image.flaticon.com/icons/png/512/18/18315.png"
+                alt=""
+              />
               <p>Your feed is cooking!</p>
             </div>
           )}
           <div className="container post-container">
-            {state.posts.map((post) => (
+            {posts.map((post) => (
               <Post
                 key={post._id}
                 _id={post._id}
@@ -116,33 +101,26 @@ const Home = () => {
                 commentButton={<FontAwesomeIcon icon={["far", "comment"]} />}
                 comments={post.comments}
                 likeButton={
-                  post.likes.includes(globalState.user.id) ? (
-                    <FontAwesomeIcon
-                      icon={["fas", "heart"]}
-                      color={"#E67222"}
-                    />
+                  post.likes.includes(user.id) ? (
+                    <FontAwesomeIcon icon="heart" color={"#E67222"} />
                   ) : (
                     <FontAwesomeIcon icon={["far", "heart"]} />
                   )
                 }
-                likeStatus={
-                  post.likes.includes(globalState.user.id) ? true : false
-                }
+                likeStatus={post.likes.includes(user.id) ? true : false}
                 likeCounter={post.likes.length}
                 shareButton={
-                  post.shares.includes(globalState.user.id) ? (
-                    <FontAwesomeIcon icon={faShare} color={"#E67222"} />
+                  post.shares.includes(user.id) ? (
+                    <FontAwesomeIcon icon="share" color={"#E67222"} />
                   ) : (
-                    <FontAwesomeIcon icon={faShare} />
+                    <FontAwesomeIcon icon="share" />
                   )
                 }
-                shareStatus={
-                  post.shares.includes(globalState.user.id) ? true : false
-                }
+                shareStatus={post.shares.includes(user.id) ? true : false}
                 shareCounter={post.shares.length}
               />
             ))}
-            {globalState.postsLoaded && (
+            {!loading && (
               <button
                 className="btn btn-danger"
                 onClick={loadMore}
@@ -161,8 +139,7 @@ const Home = () => {
 
 export default Home;
 
-{
-  /* {globalState.signedIn && (
+/* {globalState.signedIn && (
         <div className="container">
           {state.posts.map(post => (
             <Recipe
@@ -201,4 +178,11 @@ export default Home;
           ))}
         </div>
             )} */
-}
+
+// {
+//           setState({
+//             ...state,
+//             posts: json,
+//             loading: false,
+//           });
+//           setGlobalState({ ...globalState, postsLoaded: true });

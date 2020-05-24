@@ -31,7 +31,7 @@ const Comment = ({ user, date, body, likes, show }) => {
 
   return (
     <div className="card card-body comment">
-      <img src={state.profilePhoto} className="profile-photo" />
+      <img src={state.profilePhoto} className="profile-photo" alt="" />
       <h6 className="card-title post-username">{state.userName}</h6>
       <span className="card-text post-date">{date}</span>
       <p className="card-text post-body">{body}</p>

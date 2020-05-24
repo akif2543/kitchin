@@ -1,7 +1,9 @@
-import React, { useState, useContext } from "react";
-import AppContext from "./AppContext";
-import FeedAPI from "./api/FeedAPI";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// import AppContext from "./context/AppContext";
+import { addComment } from "./context/actions";
 
 const NewComment = ({ postId }) => {
   let commentBody;
@@ -11,7 +13,10 @@ const NewComment = ({ postId }) => {
     errors: false,
   });
 
-  const [globalState, setGlobalState] = useContext(AppContext);
+  // const [globalState, dispatch] = useContext(AppContext);
+
+  const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
 
   const validComment = () => {
     return commentBody.value.length > 0;
@@ -19,7 +24,7 @@ const NewComment = ({ postId }) => {
 
   const handleClose = () => {
     setState({ ...state, posted: true, errors: false });
-    setGlobalState({ ...globalState, postsLoaded: false });
+    // setGlobalState({ ...globalState, postsLoaded: false });
     setTimeout(() => {
       commentBody = null;
       setState({ ...state, posted: false });
@@ -29,9 +34,14 @@ const NewComment = ({ postId }) => {
 
   const handleSubmit = async () => {
     if (validComment()) {
-      FeedAPI.addComment(postId, commentBody.value).catch((err) =>
-        console.log("error", err)
-      );
+      dispatch(addComment(postId, commentBody.value));
+      // const post = await FeedAPI.addComment(postId, commentBody.value);
+
+      // if (post) {
+      //   dispatch({ type: UPDATE_POST, post });
+      // } else {
+      //   console.log("error");
+      // }
       handleClose();
     } else {
       setState({ ...state, errors: true });
@@ -52,7 +62,7 @@ const NewComment = ({ postId }) => {
       <div
         className="modal fade"
         id="compose-comment"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="composeComment"
         aria-hidden="true"
@@ -74,11 +84,7 @@ const NewComment = ({ postId }) => {
             </div>
             {!state.posted && (
               <div className="modal-body">
-                <img
-                  src={globalState.user.profile.profilePhoto}
-                  className="pp"
-                  alt=""
-                />
+                <img src={user.profile.profilePhoto} className="pp" alt="" />
                 <textarea ref={(elem) => (commentBody = elem)}></textarea>
               </div>
             )}
@@ -92,7 +98,7 @@ const NewComment = ({ postId }) => {
                 You cannot submit an empty comment.
               </div>
             )}
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-secondary close-comment"

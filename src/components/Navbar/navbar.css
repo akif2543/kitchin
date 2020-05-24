@@ -1,0 +1,44 @@
+nav {
+  background-color: #e67222 !important;
+  position: fixed !important;
+  width: 100%;
+  height: 3.5rem;
+  z-index: 10 !important;
+  top: 0;
+}
+
+.sign-in,
+.sign-in form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+}
+
+.sign-in form * {
+  margin-left: 8px;
+}
+
+.signin-alert {
+  padding: 6px;
+  margin: 0;
+}
+
+.sign-in input {
+  width: 40%;
+}
+
+.sign-in-btn {
+  width: 20%;
+}
+
+#nav-user {
+  text-align: right;
+}
+
+#nav-profile-photo {
+  border-radius: 50%;
+  height: 28px;
+  width: 28px;
+  margin-right: 10px;
+}

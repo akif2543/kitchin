@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
-import AppContext from "./AppContext";
-import FeedAPI from "./api/FeedAPI";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+
+// import AppContext from "./context/AppContext";
+import { newPost } from "./context/actions";
 
 const NewPost = () => {
   let postBody, image;
@@ -11,21 +12,26 @@ const NewPost = () => {
     posted: false,
   });
 
-  const [globalState, setGlobalState] = useContext(AppContext);
+  // const [globalState, dispatch] = useContext(AppContext);
 
-  const newPost = async () => {
+  const dispatch = useDispatch();
+  const user = useSelector((store) => store.user);
+
+  const handleSubmit = async () => {
     const postData = {
-      userName: globalState.user.name,
-      profilePhoto: globalState.user.profile.profilePhoto,
+      userName: user.name,
+      profilePhoto: user.profile.profilePhoto,
       postBody: postBody.value,
       image: image.value,
     };
-    FeedAPI.NewPost(postData)
-      .then(() => {
-        setState({ ...state, posted: true });
-        setGlobalState({ ...globalState, postsLoaded: false });
-      })
-      .catch((e) => console.log("error", e));
+    dispatch(newPost(postData));
+    // FeedAPI.newPost(postData)
+    //   .then((post) => {
+    //     setState({ ...state, posted: true });
+    //     dispatch({ type: UPDATE_POST, post });
+    //     // setGlobalState({ ...globalState, postsLoaded: false });
+    //   })
+    //   .catch((e) => console.log("error", e));
   };
 
   const startPost = () => {
@@ -43,12 +49,12 @@ const NewPost = () => {
         onClick={startPost}
         title="Compose post"
       >
-        <FontAwesomeIcon icon={faPen} className="post-pen" />
+        <FontAwesomeIcon icon="pen" className="post-pen" />
       </button>
       <div
         className="modal fade"
         id="compose-post"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="composePost"
         aria-hidden="true"
@@ -70,11 +76,7 @@ const NewPost = () => {
             </div>
             {!state.posted && (
               <div className="modal-body">
-                <img
-                  src={globalState.user.profile.profilePhoto}
-                  className="pp"
-                  alt=""
-                />
+                <img src={user.profile.profilePhoto} className="pp" alt="" />
                 <textarea ref={(elem) => (postBody = elem)}></textarea>
                 <label>Image URL:</label>
                 <input
@@ -89,7 +91,7 @@ const NewPost = () => {
                 Posted!
               </div>
             )}
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-secondary"
@@ -99,7 +101,7 @@ const NewPost = () => {
               </button>
               {!state.posted && (
                 <button
-                  onClick={newPost}
+                  onClick={handleSubmit}
                   type="button"
                   className="btn btn-danger"
                 >

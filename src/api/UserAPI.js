@@ -19,6 +19,15 @@ const UserAPI = {
     });
     return await res.json();
   },
+  async getUser() {
+    const res = await fetch("http://localhost:3001/users", {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: "Bearer ".concat(sessionStorage.getItem("jwt")),
+      },
+    });
+    return await res.json();
+  },
   async getInfo(id, query) {
     const res = await fetch(
       `http://localhost:3001/users/${query ? `${id}?get=${query}` : id}`
@@ -31,6 +40,7 @@ const UserAPI = {
       body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer ".concat(sessionStorage.getItem("jwt")),
       },
     });
     return await res.json();
@@ -55,12 +65,22 @@ const UserAPI = {
     );
     return await res.json();
   },
-  async updateProfile(userId, body) {
-    const res = await fetch(`http://localhost:3001/users/${userId}/profile`, {
+  async getUserProfile() {
+    const res = await fetch("http://localhost:3001/users/profile", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer ".concat(sessionStorage.getItem("jwt")),
+      },
+    });
+    return await res.json();
+  },
+  async updateProfile(body) {
+    const res = await fetch(`http://localhost:3001/users/profile`, {
       method: "PUT",
       body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer ".concat(sessionStorage.getItem("jwt")),
       },
     });
     return await res.json();

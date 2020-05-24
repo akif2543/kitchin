@@ -1,13 +1,12 @@
-import React, { useState, useContext } from "react";
-import AppContext from "./AppContext";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// import AppContext from "./context/AppContext";
 import Comment from "./Comment";
 import NewComment from "./NewComment";
-import FeedAPI from "./api/FeedAPI";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { faShare } from "@fortawesome/free-solid-svg-icons";
-import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
-import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
+// import FeedAPI from "./api/FeedAPI";
+import { togglePost } from "./context/actions";
 
 const Post = ({
   _id,
@@ -33,70 +32,74 @@ const Post = ({
     commentsOpen: false,
   });
 
-  const [globalState, setGlobalState] = useContext(AppContext);
+  const dispatch = useDispatch();
+
+  // const [globalState, dispatch] = useContext(AppContext);
 
   const handleCommentsToggle = () => {
-    setState({ ...state, commentsOpen: state.commentsOpen ? false : true });
+    setState({ ...state, commentsOpen: !state.commentsOpen });
   };
 
   const like = () => {
     setState({
       ...state,
-      likeButton: <FontAwesomeIcon icon={faSpinner} spin />,
+      likeButton: <FontAwesomeIcon icon="spinner" spin />,
     });
-    FeedAPI.postToggleable(_id, true)
-      .then(() => {
-        if (state.likeStatus) {
-          setState({
-            ...state,
-            likeButton: <FontAwesomeIcon icon={["far", "heart"]} />,
-            likeStatus: false,
-          });
-          setGlobalState({ ...globalState, postsLoaded: false });
-        } else if (!state.likeStatus) {
-          setState({
-            ...state,
-            likeButton: (
-              <FontAwesomeIcon icon={["fas", "heart"]} color={"#E67222"} />
-            ),
-            likeStatus: true,
-          });
-          setGlobalState({ ...globalState, postsLoaded: false });
-        }
-      })
-      .catch((e) => console.log("error", e));
+    dispatch(togglePost(_id, true));
+    // FeedAPI.postToggleable(_id, true)
+    //   .then((post) => {
+    //     if (state.likeStatus) {
+    //       setState({
+    //         ...state,
+    //         likeButton: <FontAwesomeIcon icon={["far", "heart"]} />,
+    //         likeStatus: false,
+    //       });
+    //       // setGlobalState({ ...globalState, postsLoaded: false });
+    //     } else if (!state.likeStatus) {
+    //       setState({
+    //         ...state,
+    //         likeButton: <FontAwesomeIcon icon="heart" color={"#E67222"} />,
+    //         likeStatus: true,
+    //       });
+    //       // setGlobalState({ ...globalState, postsLoaded: false });
+    //     }
+    //     dispatch({ type: UPDATE_POST, post });
+    // })
+    // .catch((e) => console.log("error", e));
   };
 
   const share = async () => {
     setState({
       ...state,
-      shareButton: <FontAwesomeIcon icon={faSpinner} spin />,
+      shareButton: <FontAwesomeIcon icon="spinner" spin />,
     });
-    FeedAPI.postToggleable(_id, false)
-      .then(() => {
-        if (state.shareStatus) {
-          setState({
-            ...state,
-            shareButton: <FontAwesomeIcon icon={faShare} />,
-            shareStatus: false,
-          });
-          setGlobalState({ ...globalState, postsLoaded: false });
-        } else if (!state.shareStatus) {
-          setState({
-            ...state,
-            shareButton: <FontAwesomeIcon icon={faShare} color={"#E67222"} />,
-            shareStatus: true,
-          });
-          setGlobalState({ ...globalState, postsLoaded: false });
-        }
-      })
-      .catch((e) => console.log("error", e));
+    dispatch(togglePost(_id, false));
+    // FeedAPI.postToggleable(_id, false)
+    //   .then((post) => {
+    //     if (state.shareStatus) {
+    //       setState({
+    //         ...state,
+    //         shareButton: <FontAwesomeIcon icon="share" />,
+    //         shareStatus: false,
+    //       });
+    //       // setGlobalState({ ...globalState, postsLoaded: false });
+    //     } else if (!state.shareStatus) {
+    //       setState({
+    //         ...state,
+    //         shareButton: <FontAwesomeIcon icon="share" color={"#E67222"} />,
+    //         shareStatus: true,
+    //       });
+    //       // setGlobalState({ ...globalState, postsLoaded: false });
+    //     }
+    //     dispatch({ type: UPDATE_POST, post });
+    //   })
+    //   .catch((e) => console.log("error", e));
   };
 
   return (
     <div className="card w-75 post">
       <div className="card-body">
-        <img src={profilePhoto} className="profile-photo" />
+        <img src={profilePhoto} className="profile-photo" alt="" />
         <h5 className="card-title post-username">{userName}</h5>
         <span className="card-text post-date">{date}</span>
         <p className="card-text post-body">{postBody}</p>
@@ -124,13 +127,13 @@ const Post = ({
             onClick={handleCommentsToggle}
           >
             {state.commentsOpen ? (
-              <FontAwesomeIcon icon={faAngleUp} id="comments-icon" />
+              <FontAwesomeIcon icon="angle-up" id="comments-icon" />
             ) : (
-              <FontAwesomeIcon icon={faAngleDown} id="comments-icon" />
+              <FontAwesomeIcon icon="angle-down" id="comments-icon" />
             )}
           </button>
         </div>
-        <div class="collapse" id={`comments-${_id.slice(_id.length - 5)}`}>
+        <div className="collapse" id={`comments-${_id.slice(_id.length - 5)}`}>
           {comments.map((comment) => (
             <Comment
               key={comment._id}

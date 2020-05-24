@@ -1,5 +1,3 @@
-import NewPost from "../NewPost";
-
 const FeedAPI = {
   async getPosts(date) {
     const res = await fetch(
@@ -7,7 +5,7 @@ const FeedAPI = {
     );
     return await res.json();
   },
-  async NewPost(body) {
+  async newPost(body) {
     const response = await fetch("http://localhost:3001/feed/post", {
       method: "POST",
       body: JSON.stringify(body),

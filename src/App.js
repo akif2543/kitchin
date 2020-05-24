@@ -1,15 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
+
 import Jumbotron from "./Jumbotron";
 import Showcase from "./Showcase";
 import Testimonials from "./Testimonials";
-import AppContext from "./AppContext";
 
-function App() {
-  const [globalState, setGlobalState] = useContext(AppContext);
-
-  return (
-    <div className="App">
-      <div className="landing">
+const App = (props) => (
+  <div className="App">
+    <div className="landing">
       <Jumbotron
         header="Kitchin"
         lead="Meet. Cook. Share an authentic cooking experience."
@@ -19,8 +16,7 @@ function App() {
       <Showcase />
       <Testimonials />
     </div>
-    </div>
-  );
-}
+  </div>
+);
 
 export default App;

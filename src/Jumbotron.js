@@ -1,8 +1,8 @@
-import React, { useState, useContext } from "react";
-import AppContext from "./AppContext";
-import UserAPI from "./api/UserAPI";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
+
+import { register } from "./context/actions";
 
 const Jumbotron = ({ header, lead, info, buttonLabel }) => {
   let firstName, lastName, email, password, termsConditions;
@@ -12,10 +12,11 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
     registrationSuccess: false,
   });
 
-  const [globalState, setGlobalState] = useContext(AppContext);
+  const dispatch = useDispatch();
+  const user = useSelector((store) => store.user);
 
   function validateEmail(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   }
 
@@ -50,13 +51,14 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
         email: email.value,
         password: password.value,
       };
-      UserAPI.register(userData).then((json) => {
-        setState({ ...state, errors: [], registrationSuccess: true });
-        setGlobalState({ ...globalState, openRegistration: false });
-        UserAPI.createProfile(json._id).then((json) => {
-          sessionStorage.setItem("profilePhoto", json.profilePhoto);
-        });
-      });
+      dispatch(register(userData));
+      // UserAPI.register(userData).then((json) => {
+      //   setState({ ...state, errors: [], registrationSuccess: true });
+      //   // setGlobalState({ ...globalState, openRegistration: false });
+      //   UserAPI.createProfile(json._id).then((json) => {
+      //     sessionStorage.setItem("profilePhoto", json.profilePhoto);
+      //   });
+      // });
     }
   };
 
@@ -67,7 +69,7 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
         <p className="lead">{lead}</p>
         {/* <hr className="my-4" /> */}
         <p>{info}</p>
-        {!globalState.signedIn && (
+        {!user.name && (
           <button
             className="btn btn-danger btn-lg"
             data-toggle="modal"
@@ -78,22 +80,22 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
         )}
       </div>
       <div
-        class="modal fade"
+        className="modal fade"
         id="signUp"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="editProfileLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
                 Enter the Kitchin Today
               </h5>
               <button
                 type="button"
-                class="close"
+                className="close"
                 data-dismiss="modal"
                 aria-label="Close"
               >
@@ -122,7 +124,7 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
                 />
               </div>
               <div className="registration-form-item form-group">
-                <label for="exampleInputEmail1">Email address</label>
+                <label htmlFor="exampleInputEmail1">Email address</label>
                 <input
                   ref={(elem) => (email = elem)}
                   type="email"
@@ -136,15 +138,15 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
                 </small>
               </div>
               <div className="registration-form-item form-group">
-                <label for="exampleInputPassword1">
+                <label htmlFor="exampleInputPassword1">
                   Password
                   <a
                     href="#"
-                    class="tooltip-test"
+                    className="tooltip-test"
                     title="Password must be between 8 and 16 characters."
                   >
                     <FontAwesomeIcon
-                      icon={faQuestionCircle}
+                      icon="question-circle"
                       id="password-popover"
                     />
                   </a>
@@ -164,7 +166,7 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
                   className="form-check-input"
                   id="exampleCheck1"
                 />
-                <label className="form-check-label" for="exampleCheck1">
+                <label className="form-check-label" htmlFor="exampleCheck1">
                   I agree to the terms and conditions.
                 </label>
               </div>
@@ -184,11 +186,11 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
                 You have been successfully registered!
               </div>
             )}
-            <div class="modal-footer">
+            <div className="modal-footer">
               {!state.registrationSuccess && (
                 <button
                   type="button"
-                  class="btn btn-secondary"
+                  className="btn btn-secondary"
                   data-dismiss="modal"
                 >
                   Close
@@ -198,7 +200,7 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
                 <button
                   onClick={registerUser}
                   type="button"
-                  class="btn btn-danger"
+                  className="btn btn-danger"
                 >
                   Register
                 </button>
@@ -206,7 +208,7 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
               {state.registrationSuccess && (
                 <button
                   type="button"
-                  class="btn btn-secondary"
+                  className="btn btn-secondary"
                   data-dismiss="modal"
                 >
                   Close

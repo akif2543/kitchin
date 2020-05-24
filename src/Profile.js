@@ -1,24 +1,20 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUtensils } from "@fortawesome/free-solid-svg-icons";
-import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
-import { faCity } from "@fortawesome/free-solid-svg-icons";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-// import { faUsers } from "@fortawesome/free-solid-svg-icons";
-import { faUserEdit } from "@fortawesome/free-solid-svg-icons";
-import AppContext from "./AppContext";
-import UserAPI from "./api/UserAPI";
+
+// import AppContext from "./context/AppContext";
+import { updateProfile } from "./context/actions";
+// import UserAPI from "./api/UserAPI";
 
 const Profile = () => {
   let cuisine, location, profilePhoto, occupation, bio, favFood;
 
-  const [globalState, setGlobalState] = useContext(AppContext);
+  // const [globalState, dispatch] = useContext(AppContext);
 
-  const [state, setState] = useState({
-    editProfile: false,
-  });
+  const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
 
-  const updateProfile = () => {
+  const handleSubmit = () => {
     const profileData = {
       profilePhoto: profilePhoto.value,
       cuisine: cuisine.value,
@@ -27,50 +23,53 @@ const Profile = () => {
       bio: bio.value,
       favoriteFood: favFood.value,
     };
-    UserAPI.updateProfile(globalState.user.id, profileData)
-      .then((json) => {
-        globalState.user.profile = json;
-        globalState.profileLoaded = false;
-        sessionStorage.setItem("profilePhoto", json.profilePhoto);
-        window.location.reload();
-      })
-      .catch((e) => console.log("error", e));
+    dispatch(updateProfile(profileData));
+    // UserAPI.updateProfile(globalState.user.id, profileData)
+    //   .then((profile) => {
+    //     // globalState.user.profile = json;
+    //     dispatch({ type: UPDATE_PROFILE, profile });
+    //     // globalState.profileLoaded = false;
+    //     sessionStorage.setItem("profilePhoto", profile.profilePhoto);
+    //     window.location.reload();
+    //   })
+    //   .catch((e) => console.log("error", e));
   };
 
-  useEffect(() => {
-    if (!globalState.profileLoaded) {
-      UserAPI.getProfile(globalState.user.id)
-        .then((json) => {
-          globalState.user.profile = json;
-        })
-        .catch((e) => console.log("error", e));
-    }
-    return () => {
-      setGlobalState({ ...globalState, profileLoaded: true });
-    };
-  }, [globalState.profileLoaded]);
+  // useEffect(() => {
+  //   if (!globalState.profileLoaded) {
+  //     UserAPI.getProfile(globalState.user.id)
+  //       .then((json) => {
+  //         globalState.user.profile = json;
+  //       })
+  //       .catch((e) => console.log("error", e));
+  //   }
+  //   return () => {
+  //     setGlobalState({ ...globalState, profileLoaded: true });
+  //   };
+  // }, [globalState.profileLoaded]);
 
   return (
     <div className="col-sm-4">
       <div className="card profile col-sm-4" style={{ width: "18rem" }}>
         <img
           className="card-img-top photo"
-          src={globalState.user.profile.profilePhoto}
+          src={user.profile.profilePhoto}
+          alt=""
         />
         <div className="card-body">
-          <h1 className="card-title username">{globalState.user.name}</h1>
+          <h1 className="card-title username">{user.name}</h1>
           <ul className="list-group list-group-flush">
             <li className="list-group-item cuisine">
-              <FontAwesomeIcon icon={faUtensils} className="utensils" />
-              {globalState.user.profile.cuisine}
+              <FontAwesomeIcon icon="utensils" className="utensils" />
+              {user.profile.cuisine}
             </li>
             <li className="list-group-item location">
-              <FontAwesomeIcon icon={faCity} className="city" />
-              {globalState.user.profile.location}
+              <FontAwesomeIcon icon="city" className="city" />
+              {user.profile.location}
             </li>
             <li className="list-group-item occupation">
-              <FontAwesomeIcon icon={faBriefcase} className="briefcase" />
-              {globalState.user.profile.occupation}
+              <FontAwesomeIcon icon="briefcase" className="briefcase" />
+              {user.profile.occupation}
             </li>
           </ul>
           <h5 className="card-title bio-title">Bio</h5>
@@ -80,20 +79,21 @@ const Profile = () => {
             data-toggle="modal"
             data-target="#editProfile"
           >
-            <FontAwesomeIcon icon={faUserEdit} className="profile-edit" />
+            <FontAwesomeIcon icon="user-edit" className="profile-edit" />
           </button>
-          <p className="card-text bio">{globalState.user.profile.bio}</p>
+          <p className="card-text bio">{user.profile.bio}</p>
           <h6 className="card-title food-title">Favorite foods</h6>
-          <span>{globalState.user.profile.favoriteFood}</span>
+          <span>{user.profile.favoriteFood}</span>
         </div>
       </div>
       <div className="card mobile-profile" style={{ width: "18rem" }}>
         <div className="card-body">
           <img
-            src={globalState.user.profile.profilePhoto}
+            src={user.profile.profilePhoto}
             className="card-img-top photo"
+            alt=""
           />
-          <h2 className="card-title">{globalState.user.name}</h2>
+          <h2 className="card-title">{user.name}</h2>
           <button
             className="mobile-profile-btn"
             data-toggle="collapse"
@@ -101,23 +101,23 @@ const Profile = () => {
             aria-expanded="false"
             aria-controls="collapseExample"
           >
-            <FontAwesomeIcon icon={faUser} className="mobile-profile-icon" />
+            <FontAwesomeIcon icon="user" className="mobile-profile-icon" />
             View Profile
           </button>
         </div>
         <div className="collapse" id="collapseExample">
           <ul className="list-group list-group-flush">
             <li className="list-group-item cuisine">
-              <FontAwesomeIcon icon={faUtensils} className="utensils" />
-              {globalState.user.profile.cuisine}
+              <FontAwesomeIcon icon="utensils" className="utensils" />
+              {user.profile.cuisine}
             </li>
             <li className="list-group-item location">
-              <FontAwesomeIcon icon={faCity} className="city" />
-              {globalState.user.profile.location}
+              <FontAwesomeIcon icon="city" className="city" />
+              {user.profile.location}
             </li>
             <li className="list-group-item occupation">
-              <FontAwesomeIcon icon={faBriefcase} className="briefcase" />
-              {globalState.user.profile.occupation}
+              <FontAwesomeIcon icon="briefcase" className="briefcase" />
+              {user.profile.occupation}
             </li>
           </ul>
           <h5 className="card-title bio-title">Bio</h5>
@@ -127,17 +127,17 @@ const Profile = () => {
             data-target="#editProfile"
             title="Edit profile"
           >
-            <FontAwesomeIcon icon={faUserEdit} className="profile-edit" />
+            <FontAwesomeIcon icon="user-edit" className="profile-edit" />
           </button>
-          <p className="card-text bio">{globalState.user.profile.bio}</p>
+          <p className="card-text bio">{user.profile.bio}</p>
           <h6 className="card-title food-title">Favorite foods</h6>
-          <span>{globalState.user.profile.favoriteFood}</span>
+          <span>{user.profile.favoriteFood}</span>
         </div>
       </div>
       <div
         className="modal fade"
         id="editProfile"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="editProfileLabel"
         aria-hidden="true"
@@ -165,7 +165,7 @@ const Profile = () => {
                   type="text"
                   className="form-control"
                   id="edit-profile-photo"
-                  defaultValue={globalState.user.profile.profilePhoto}
+                  defaultValue={user.profile.profilePhoto}
                 />
               </div>
               <div className="registration-form-item form-group">
@@ -175,7 +175,7 @@ const Profile = () => {
                   type="text"
                   className="form-control"
                   id="cuisine"
-                  defaultValue={globalState.user.profile.cuisine}
+                  defaultValue={user.profile.cuisine}
                 />
               </div>
               <div className="registration-form-item form-group">
@@ -185,7 +185,7 @@ const Profile = () => {
                   type="text"
                   className="form-control"
                   id="location"
-                  defaultValue={globalState.user.profile.location}
+                  defaultValue={user.profile.location}
                 />
               </div>
               <div className="registration-form-item form-group">
@@ -195,7 +195,7 @@ const Profile = () => {
                   type="text"
                   className="form-control"
                   id="occupation"
-                  defaultValue={globalState.user.profile.occupation}
+                  defaultValue={user.profile.occupation}
                 />
               </div>
               <div className="registration-form-item form-group">
@@ -205,7 +205,7 @@ const Profile = () => {
                   type="text"
                   className="form-control"
                   id="bio"
-                  defaultValue={globalState.user.profile.bio}
+                  defaultValue={user.profile.bio}
                 />
               </div>
               <div className="registration-form-item form-group">
@@ -215,7 +215,7 @@ const Profile = () => {
                   type="text"
                   className="form-control"
                   id="fav-food"
-                  defaultValue={globalState.user.profile.favoriteFood}
+                  defaultValue={user.profile.favoriteFood}
                 />
               </div>
               <div className="modal-footer">
@@ -227,7 +227,7 @@ const Profile = () => {
                   Close
                 </button>
                 <button
-                  onClick={updateProfile}
+                  onClick={handleSubmit}
                   type="button"
                   className="btn btn-danger"
                 >
