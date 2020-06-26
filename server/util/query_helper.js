@@ -1,12 +1,6 @@
-const USER_SELECT = "handle photo firstName lastName -_id";
+const USER_SELECT = "-email -password -_id";
 
 const queryHelper = {
-  profPop: [
-    {
-      path: "user",
-      select: USER_SELECT,
-    },
-  ],
   userSelect: USER_SELECT,
   postPop: [
     {

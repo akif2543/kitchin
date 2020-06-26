@@ -13,7 +13,7 @@ router.get("/post", (req, res) => {
     })
     .catch((err) => {
       console.log("error", err);
-      res.status(404).end();
+      res.status(404).json(err);
     });
 });
 
@@ -24,30 +24,26 @@ router.put("/toggle", async (req, res) => {
   const post = await Post.findById(postId);
 
   if (post) {
-    const { likes, shares } = post;
-
     if (like) {
-      if (likes.includes(userId)) {
-        likes.splice(likes.indexOf(userId), 1);
+      if (post.likes.includes(userId)) {
+        post.likes.splice(post.likes.indexOf(userId), 1);
       } else {
-        likes.push(userId);
+        post.likes.push(userId);
       }
     } else {
-      if (shares.includes(userId)) {
-        shares.splice(shares.indexOf(userId), 1);
+      if (post.shares.includes(userId)) {
+        post.shares.splice(post.shares.indexOf(userId), 1);
       } else {
-        shares.push(userId);
+        post.shares.push(userId);
       }
     }
 
-    Post.updateOne({ _id: postId }, { likes, shares })
-      .populate(postPop)
-      .then((updatedPost) => {
-        res.status(200).json(updatedPost);
-      })
+    const saved = await post.save();
+    Post.populate(saved, postPop)
+      .then((updatedPost) => res.status(200).json(updatedPost))
       .catch((e) => {
         console.log(e);
-        res.status(500).end();
+        res.status(500).json(e);
       });
   } else {
     res.status(404).end();

@@ -7,11 +7,6 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const Profile = require("../models/profile");
 const { profPop, userSelect } = require("../util/query_helper");
-const {
-  comparePasswords,
-  getJWT,
-  hashPassword,
-} = require("../util/auth_helper");
 
 const secret = process.env.SECRET;
 
@@ -19,16 +14,8 @@ const router = express.Router();
 
 router.get("/:handle", (req, res) => {
   User.findOne(req.params)
-    .then((user) => {
-      if (user) {
-        Profile.findOne({ user })
-          .populate(profPop)
-          .then((profile) => res.status(200).json(profile))
-          .catch((e) => res.status(404).json(e));
-      } else {
-        res.status(404).end();
-      }
-    })
+    .select(userSelect)
+    .then((user) => res.status(200).json(user))
     .catch((e) => res.status(404).json(e));
 });
 
@@ -38,21 +25,21 @@ router.post("/login", async (req, res) => {
   const found = await User.findOne({ email });
 
   if (found) {
-    const match = await comparePasswords(password, found.password);
+    const match = await bcrypt.compare(password, found.password);
 
     if (match) {
-      Profile.findOne({ user: found._id })
-        .populate(profPop)
-        .then((profile) => {
+      found
+        .select(userSelect)
+        .then((user) => {
           const payload = { id: found._id, handle: found.handle };
           jwt.sign(payload, secret, (err, token) => {
             if (token) {
               res.status(201).json({
                 token,
-                profile,
+                user,
               });
             } else {
-              res.status(500).end();
+              res.status(500).json(err);
             }
           });
         })
@@ -70,7 +57,7 @@ router.put(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const profileData = {
-      profilePhoto: req.body.profilePhoto,
+      avatar: req.body.avatar,
       location: req.body.location,
       occupation: req.body.occupation,
       bio: req.body.bio,
@@ -78,11 +65,11 @@ router.put(
       favoriteFood: req.body.favoriteFood,
     };
 
-    Profile.findOneAndUpdate({ user: req.user.id }, profileData, {
+    User.findByIdAndUpdate(req.user.id, profileData, {
       new: true,
     })
-      .populate(profPop)
-      .then((profile) => res.status(200).json(profile))
+      .populate(userSelect)
+      .then((user) => res.status(200).json(user))
       .catch((e) => res.status(404).json(e));
   }
 );
@@ -91,16 +78,10 @@ router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    if (req.user) {
-      const user = req.user.id;
-
-      Profile.findOne({ user })
-        .populate(profPop)
-        .then((populated) => res.status(200).json(populated))
-        .catch((e) => res.status(500).json(e));
-    } else {
-      res.status(401).end();
-    }
+    User.findById(req.user.id)
+      .select(userSelect)
+      .then((user) => res.status(200).json(user))
+      .catch((e) => res.status(500).json(e));
   }
 );
 
@@ -112,7 +93,6 @@ router.post("/", async (req, res) => {
     email: req.body.email,
   };
 
-  //req.params.id
   const { password } = req.body;
   const newUser = new User(formData);
 
@@ -128,46 +108,25 @@ router.post("/", async (req, res) => {
       newUser.password = hashedPassword;
 
       const savedUser = await newUser.save();
-      const newProfile = new Profile({ user: savedUser._id });
-      const savedProfile = await newProfile.save();
 
-      Profile.populate(savedProfile, profPop)
-        .then((profile) => {
+      savedUser
+        .select(userSelect)
+        .then((user) => {
           const payload = { id: savedUser._id, handle: savedUser.handle };
           jwt.sign(payload, secret, (err, token) => {
             if (token) {
               res.status(201).json({
                 token,
-                profile,
+                user,
               });
             } else {
-              res.status(500).end();
+              res.status(500).json(err);
             }
           });
         })
         .catch((e) => res.status(500).send(e));
     });
   });
-
-  // newUser.password = await hashPassword(password);
-
-  // const savedUser = await newUser.save();
-  // const newProfile = new Profile({ user: savedUser._id });
-  // const savedProfile = await newProfile.save();
-
-  // Profile.populate(savedProfile, profPop)
-  //   .then((profile) => {
-  //     const token = getJWT(savedUser._id, savedUser.handle);
-  //     if (token) {
-  //       res.status(201).json({
-  //         token,
-  //         profile,
-  //       });
-  //     } else {
-  //       res.status(500).end();
-  //     }
-  //   })
-  //   .catch((e) => res.status(500).send(e));
 });
 
 router.put(
@@ -180,7 +139,7 @@ router.put(
       handle: req.body.handle,
     };
 
-    User.findOneAndUpdate({ _id: req.user.id }, userData, {
+    User.ByIdAndUpdate(req.user.id, userData, {
       new: true,
       runValidators: true,
       context: "query ",
