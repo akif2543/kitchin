@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Post from "./Post";
-import NewPost from "./NewPost";
+import NewPost from "../../NewPost";
 import Profile from "./Profile";
 // import Recipe from "./Recipe";
 // import AppContext from "./context/AppContext";
-import { fetchFeed } from "./context/actions";
+import { fetchFeed } from "../../context/actions";
 
 const Home = () => {
   const dispatch = useDispatch();

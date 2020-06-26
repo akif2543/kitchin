@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // import AppContext from "./context/AppContext";
-import { addComment } from "./context/actions";
+import { addComment } from "../../context/actions";
 
 const NewComment = ({ postId }) => {
   let commentBody;

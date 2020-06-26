@@ -69,7 +69,7 @@ router.put("/comment", (req, res) => {
     })
     .catch((e) => {
       console.log(e);
-      res.status(404).end();
+      res.status(404).json(e);
     });
 });
 
@@ -105,15 +105,14 @@ router.get("/", (req, res) => {
     .sort({ date: -1 })
     .limit(5)
     .populate(postPop)
-    .then((posts) => {
-      res.json(posts);
-    })
-    .catch((err) => {
-      console.log("error", err);
-    });
+    .then((posts) => res.status(200).json(posts))
+    .catch((err) => res.status(404).json(err));
 });
 
 router.post("/", async (req, res) => {
+  if (!Boolean(req.body.body.trim().length))
+    return res.status(422).json({ error: "You cannot make an empty post!" });
+
   const postData = {
     author: req.user.id,
     body: req.body.body,
@@ -126,7 +125,7 @@ router.post("/", async (req, res) => {
 
   Post.populate(savedPost, postPop, (err, populatedPost) => {
     if (err) {
-      res.status(404).send(err);
+      res.status(404).json(err);
     } else {
       res.status(201).json(populatedPost);
     }

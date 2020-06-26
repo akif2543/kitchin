@@ -4,7 +4,7 @@ import Jumbotron from "./Jumbotron";
 import Showcase from "./Showcase";
 import Testimonials from "./Testimonials";
 
-const App = (props) => (
+const Splash = (props) => (
   <div className="App">
     <div className="landing">
       <Jumbotron
@@ -19,4 +19,4 @@ const App = (props) => (
   </div>
 );
 
-export default App;
+export default Splash;

@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import SignInForm from "./SignInForm";
-import UserDropdown from "./UserDropdown";
+import SignInForm from "./signInForm";
+import UserDropdown from "./userDropdown";
 import "./navbar.css";
 
 const Navbar = ({

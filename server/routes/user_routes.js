@@ -5,12 +5,13 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const User = require("../models/user");
-const Profile = require("../models/profile");
-const { profPop, userSelect } = require("../util/query_helper");
+const { userSelect } = require("../util/query_helper");
 
 const secret = process.env.SECRET;
 
 const router = express.Router();
+
+const valid = (text) => Boolean(text.trim().length);
 
 router.get("/:handle", (req, res) => {
   User.findOne(req.params)
@@ -21,6 +22,11 @@ router.get("/:handle", (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+
+  if (!valid(email) || !valid(password))
+    return res
+      .status(422)
+      .json({ error: "You need to enter an email and password" });
 
   const found = await User.findOne({ email });
 
@@ -35,7 +41,7 @@ router.post("/login", async (req, res) => {
           jwt.sign(payload, secret, (err, token) => {
             if (token) {
               res.status(201).json({
-                token,
+                token: `Bearer ${token}`,
                 user,
               });
             } else {
@@ -107,7 +113,13 @@ router.post("/", async (req, res) => {
       }
       newUser.password = hashedPassword;
 
-      const savedUser = await newUser.save();
+      let savedUser;
+
+      try {
+        savedUser = await newUser.save();
+      } catch (e) {
+        return res.status(422).json(e);
+      }
 
       savedUser
         .select(userSelect)
@@ -116,7 +128,7 @@ router.post("/", async (req, res) => {
           jwt.sign(payload, secret, (err, token) => {
             if (token) {
               res.status(201).json({
-                token,
+                token: `Bearer ${token}`,
                 user,
               });
             } else {
@@ -124,7 +136,7 @@ router.post("/", async (req, res) => {
             }
           });
         })
-        .catch((e) => res.status(500).send(e));
+        .catch((e) => res.status(500).json(e));
     });
   });
 });
@@ -139,7 +151,7 @@ router.put(
       handle: req.body.handle,
     };
 
-    User.ByIdAndUpdate(req.user.id, userData, {
+    User.FindByIdAndUpdate(req.user.id, userData, {
       new: true,
       runValidators: true,
       context: "query ",
@@ -149,7 +161,7 @@ router.put(
         res.status(200).json(user);
       })
       .catch((e) => {
-        res.status(404).json(e);
+        res.status(422).json(e);
       });
   }
 );

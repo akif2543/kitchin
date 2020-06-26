@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Comment from "./Comment";
 import NewComment from "./NewComment";
 // import FeedAPI from "./api/FeedAPI";
-import { togglePost } from "./context/actions";
+import { togglePost } from "../../context/actions";
 
 const Post = ({
   _id,

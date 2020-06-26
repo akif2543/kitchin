@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { signIn, clearUser } from "../../context/actions";
-import Navbar from "./Navbar";
+import Navbar from "./navbar";
 
 const NavbarContainer = ({ links }) => {
   const dispatch = useDispatch();
