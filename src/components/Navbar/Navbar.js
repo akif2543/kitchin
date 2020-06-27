@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import SessionForm from "./session_form";
 import UserDropdown from "./user_dropdown";
@@ -10,10 +10,8 @@ const Navbar = ({ history }) => {
   const loggedIn = useSelector((store) => isLoggedIn(store));
 
   return (
-    <nav className="navbar">
-      <Link className="navbar-logo" to="/">
-        <button>Kitchin</button>
-      </Link>
+    <nav className="nav">
+      <span className="navbar-brand">Kitchin</span>
 
       {loggedIn ? (
         <UserDropdown history={history} />

@@ -1,27 +1,21 @@
 import React from "react";
-// import AppContext from "./context/AppContext";
-import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { Link } from "react-router-dom";
 
-const Footer = (prop) => {
-  // const [globalState, dispatch] = useContext(AppContext);
-
-  const resetPosts = () => {
-    // setGlobalState({ ...globalState, postsLoaded: false });
-  };
-
+const Footer = () => {
   return (
     <footer className="footer bg-light">
       <div className="container">
         <div className="row">
           <div className="col-lg-6 h-100 text-center text-lg-left my-auto">
             <ul className="list-inline mb-2">
-              {prop.links.map((link, i) => (
+              {/* {prop.links.map((link, i) => (
                 <li className="list-inline-item" key={i}>
                   <Link to={link.path} onClick={resetPosts}>
                     {link.label}
                   </Link>
                 </li>
-              ))}
+              ))} */}
             </ul>
             <p className="text-muted small mb-4 mb-lg-0">
               &copy; Kitchin 2019. All Rights Reserved.
@@ -30,18 +24,18 @@ const Footer = (prop) => {
           <div className="col-lg-6 h-100 text-center text-lg-right my-auto">
             <ul className="list-inline mb-0">
               <li className="list-inline-item mr-3">
-                <a href="#">
-                  <i className="fab fa-facebook fa-2x fa-fw"></i>
+                <a href="https://github.com/akif2543/kitchin">
+                  <FontAwesomeIcon icon={["fab", "github"]} size="lg" />
                 </a>
               </li>
               <li className="list-inline-item mr-3">
-                <a href="#">
-                  <i className="fab fa-twitter-square fa-2x fa-fw"></i>
+                <a href="https://www.linkedin.com/in/akifsaifi/">
+                  <FontAwesomeIcon icon={["fab", "linkedin"]} size="lg" />
                 </a>
               </li>
               <li className="list-inline-item">
                 <a href="#">
-                  <i className="fab fa-instagram fa-2x fa-fw"></i>
+                  <FontAwesomeIcon icon={["fab", "angellist"]} size="lg" />
                 </a>
               </li>
             </ul>

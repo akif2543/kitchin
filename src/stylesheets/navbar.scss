@@ -1,44 +1,69 @@
-nav {
-  background-color: #e67222 !important;
-  position: fixed !important;
-  width: 100%;
+.nav {
   height: 3.5rem;
-  z-index: 10 !important;
+  width: 100%;
+  position: fixed;
+  @include flex(row, space-between, center);
+  padding: 0 10px;
+  background-color: $orange;
   top: 0;
+  z-index: 5;
+
+  span {
+    font-size: 24px;
+    margin-bottom: 0;
+  }
+
+  .sign-in,
+  .sign-in form {
+    @include flex(row, center, center);
+    height: 100%;
+  }
+
+  .sign-in form * {
+    margin-left: 8px;
+  }
+
+  .signin-alert {
+    padding: 6px;
+    margin: 0;
+  }
+
+  .btn-group {
+    height: 100%;
+
+    .nav-user {
+      @include flex(row, flex-start, center);
+      padding-right: 0;
+
+      #navatar {
+        border-radius: 50%;
+        height: 80%;
+        width: auto;
+        margin-right: 10px;
+      }
+
+      h3 {
+        margin-bottom: 0;
+        font-size: 24px;
+      }
+    }
+  }
+
+  // position: fixed !important;
+  // z-index: 10 !important;
+  //
 }
 
-.sign-in,
-.sign-in form {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 100%;
-}
+// .sign-in input {
+//   width: 40%;
+// }
 
-.sign-in form * {
-  margin-left: 8px;
-}
+// .sign-in-btn {
+//   width: 20%;
+// }
 
-.signin-alert {
-  padding: 6px;
-  margin: 0;
-}
+// #nav-user {
+//   text-align: right;
+// }
 
-.sign-in input {
-  width: 40%;
-}
-
-.sign-in-btn {
-  width: 20%;
-}
-
-#nav-user {
-  text-align: right;
-}
-
-#nav-profile-photo {
-  border-radius: 50%;
-  height: 28px;
-  width: 28px;
-  margin-right: 10px;
-}
+//

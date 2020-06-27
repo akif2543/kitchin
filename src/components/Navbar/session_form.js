@@ -24,23 +24,21 @@ const SessionForm = ({ history }) => {
 
   return (
     <div className="sign-in">
-      <ul>
-        {presenceError && (
-          <div className="alert alert-danger signin-alert" role="alert">
-            Please enter an email and password.
-          </div>
-        )}
-        {error && (
-          <div className="alert alert-danger signin-alert" role="alert">
-            Invalid email or password.
-          </div>
-        )}
-      </ul>
-      <form onSubmit={handleSubmit}>
+      {presenceError && (
+        <div className="alert alert-danger signin-alert" role="alert">
+          Please enter an email and password.
+        </div>
+      )}
+      {error && (
+        <div className="alert alert-danger signin-alert" role="alert">
+          Invalid email or password.
+        </div>
+      )}
+      <form className="form-inline" onSubmit={handleSubmit}>
         <input
           onChange={handleChange("email")}
           type="email"
-          className="form-control"
+          className="form-control mr-sm-2"
           id="signInEmail"
           aria-describedby="emailHelp"
           placeholder="Email"
@@ -49,7 +47,7 @@ const SessionForm = ({ history }) => {
         <input
           onChange={handleChange("password")}
           type="password"
-          className="form-control"
+          className="form-control mr-sm-2"
           id="signInPassword"
           placeholder="Password"
           value={password}

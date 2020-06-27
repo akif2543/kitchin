@@ -1,21 +1,14 @@
 import React from "react";
 
-import Jumbotron from "./Jumbotron";
-import Showcase from "./Showcase";
-import Testimonials from "./Testimonials";
+import Jumbotron from "./jumbotron";
+import Showcase from "./showcase";
+import Testimonials from "./testimonials";
 
 const Splash = (props) => (
-  <div className="App">
-    <div className="landing">
-      <Jumbotron
-        header="Kitchin"
-        lead="Meet. Cook. Share an authentic cooking experience."
-        info="Find adventures nearby and encounter unique cuisines, techniques, and cultures from around the world."
-        buttonLabel="Sign Up"
-      />
-      <Showcase />
-      <Testimonials />
-    </div>
+  <div className="splash">
+    <Jumbotron />
+    <Showcase />
+    <Testimonials />
   </div>
 );
 

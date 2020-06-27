@@ -1,0 +1,14 @@
+.footer {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  .container {
+    top: 60px;
+  }
+
+  a {
+    color: $orange;
+    &:hover {
+      color: red;
+    }
+  }
+}

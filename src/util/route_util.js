@@ -3,7 +3,7 @@ import { Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 import Navbar from "../components/navbar/navbar";
-import Footer from "../Footer";
+import Footer from "../components/navbar/footer";
 
 const links = [
   {
@@ -16,11 +16,11 @@ const links = [
   },
 ];
 
-const LayoutRoute = ({ path, component, exact }) => {
+const LayoutRoute = ({ path, render, exact }) => {
   return (
     <div>
       <Navbar links={links} />
-      <Route path={path} exact={exact} component={component} />
+      <Route path={path} exact={exact} render={render} />
       <Footer links={links} />
     </div>
   );
@@ -31,7 +31,7 @@ const Auth = ({ component: Component, path, loggedIn, exact }) => (
     path={path}
     exact={exact}
     render={(props) =>
-      !loggedIn ? <Component {...props} /> : <Redirect to="/" />
+      !loggedIn ? <Component {...props} /> : <Redirect to="/feed" />
     }
   />
 );
@@ -46,7 +46,7 @@ const Protected = ({ component: Component, loggedIn, ...rest }) => (
 );
 
 const mSTP = (state) => ({
-  loggedIn: Boolean(state.session.user),
+  loggedIn: Boolean(state.session.id),
 });
 
 export const AuthRoute = withRouter(connect(mSTP)(Auth));

@@ -22,7 +22,16 @@ import {
   faUserEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
+import {
+  faGithub,
+  faLinkedin,
+  faAngellist,
+} from "@fortawesome/free-brands-svg-icons";
+
 library.add(
+  faGithub,
+  faLinkedin,
+  faAngellist,
   faHeartRegular,
   faHeartSolid,
   faShareSquareSolid,

@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 
 const User = require("../models/user");
 const { userSelect } = require("../util/query_helper");
+const { formatErrors } = require("../util/auth_helper");
 
 const secret = process.env.SECRET;
 
@@ -88,8 +89,8 @@ router.get(
 
 router.post("/register", async (req, res) => {
   const formData = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
+    firstName: req.body["first name"],
+    lastName: req.body["last name"],
     handle: req.body.handle,
     email: req.body.email,
   };
@@ -113,7 +114,7 @@ router.post("/register", async (req, res) => {
       try {
         savedUser = await newUser.save();
       } catch (e) {
-        return res.status(400).json(e);
+        return res.status(400).json(formatErrors(e));
       }
 
       const user = savedUser.toJSON();
