@@ -1,64 +1,27 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, withRouter } from "react-router-dom";
 
-import SignInForm from "./signInForm";
-import UserDropdown from "./userDropdown";
-import "./navbar.css";
+import SessionForm from "./session_form";
+import UserDropdown from "./user_dropdown";
+import { isLoggedIn } from "../../reducers/selectors/selectors";
 
-const Navbar = ({
-  links,
-  email,
-  password,
-  error,
-  handleChange,
-  handleSignOut,
-  handleSignIn,
-  user,
-  resetPosts,
-}) => (
-  <nav className="navbar navbar-expand-lg navbar-light">
-    <Link className="navbar-brand" to="/" onClick={resetPosts}>
-      Kitchin
-    </Link>
-    <button
-      className="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span className="navbar-toggler-icon"></span>
-    </button>
+const Navbar = ({ history }) => {
+  const loggedIn = useSelector((store) => isLoggedIn(store));
 
-    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul className="navbar-nav mr-auto">
-        {links.map((link, i) => (
-          <li className="nav-item" key={i}>
-            <Link
-              className="nav-link active"
-              to={link.path}
-              onClick={resetPosts}
-            >
-              {link.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-      {user.name ? (
-        <UserDropdown user={user} handleSignOut={handleSignOut} />
+  return (
+    <nav className="navbar">
+      <Link className="navbar-logo" to="/">
+        <button>Kitchin</button>
+      </Link>
+
+      {loggedIn ? (
+        <UserDropdown history={history} />
       ) : (
-        <SignInForm
-          email={email}
-          password={password}
-          handleSubmit={handleSignIn}
-          handleChange={handleChange}
-          error={error}
-        />
+        <SessionForm history={history} />
       )}
-    </div>
-  </nav>
-);
+    </nav>
+  );
+};
 
-export default Navbar;
+export default withRouter(Navbar);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { register } from "./context/actions";
+// import { register } from "./context/actions";
 
 const Jumbotron = ({ header, lead, info, buttonLabel }) => {
   let firstName, lastName, email, password, termsConditions;
@@ -44,22 +44,22 @@ const Jumbotron = ({ header, lead, info, buttonLabel }) => {
   };
 
   const registerUser = () => {
-    if (validateForm().length === 0) {
-      const userData = {
-        firstName: firstName.value,
-        lastName: lastName.value,
-        email: email.value,
-        password: password.value,
-      };
-      dispatch(register(userData));
-      // UserAPI.register(userData).then((json) => {
-      //   setState({ ...state, errors: [], registrationSuccess: true });
-      //   // setGlobalState({ ...globalState, openRegistration: false });
-      //   UserAPI.createProfile(json._id).then((json) => {
-      //     sessionStorage.setItem("profilePhoto", json.profilePhoto);
-      //   });
-      // });
-    }
+    // if (validateForm().length === 0) {
+    //   const userData = {
+    //     firstName: firstName.value,
+    //     lastName: lastName.value,
+    //     email: email.value,
+    //     password: password.value,
+    //   };
+    //   dispatch(register(userData));
+    // UserAPI.register(userData).then((json) => {
+    //   setState({ ...state, errors: [], registrationSuccess: true });
+    //   // setGlobalState({ ...globalState, openRegistration: false });
+    //   UserAPI.createProfile(json._id).then((json) => {
+    //     sessionStorage.setItem("profilePhoto", json.profilePhoto);
+    //   });
+    // });
+    // }
   };
 
   return (

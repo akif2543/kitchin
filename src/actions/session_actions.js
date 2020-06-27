@@ -1,3 +1,4 @@
+import JwtDecode from "jwt-decode";
 import { normalize } from "normalizr";
 
 import UserAPI from "../api/UserAPI";
@@ -33,11 +34,17 @@ const receiveUserErrors = (errors) => ({
   errors,
 });
 
+const extractUser = (user) => {
+  const normalized = normalize(user, userSchema);
+  const { users } = normalized.entities;
+  return users;
+};
+
 export const getUser = (res) => {
-  const { token, user } = res.data;
+  const { token } = res.data;
   localStorage.setItem("jwt", token);
   UserAPI.setAuthToken(token);
-  return normalize(user, userSchema);
+  return extractUser(JwtDecode(token));
 };
 
 export const register = (userData) => (dispatch) =>

@@ -1,11 +1,13 @@
 import { RECEIVE_CURRENT_USER, SIGN_OUT } from "../../actions/session_actions";
 
-const sessionReducer = (state = null, action) => {
+const sessionReducer = (state = { id: null }, action) => {
+  let id;
   switch (action.type) {
     case RECEIVE_CURRENT_USER:
-      return action.user.handle;
+      [id] = Object.keys(action.user);
+      return { id };
     case SIGN_OUT:
-      return null;
+      return { id: null };
     default:
       return state;
   }

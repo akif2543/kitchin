@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
-import NavbarContainer from "../components/Navbar/NavbarContainer";
+import Navbar from "../components/navbar/navbar";
 import Footer from "../Footer";
 
 const links = [
@@ -19,7 +19,7 @@ const links = [
 const LayoutRoute = ({ path, component, exact }) => {
   return (
     <div>
-      <NavbarContainer links={links} />
+      <Navbar links={links} />
       <Route path={path} exact={exact} component={component} />
       <Footer links={links} />
     </div>

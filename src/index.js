@@ -1,20 +1,26 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import JwtDecode from "jwt-decode";
 
-import "./index.css";
+import "./stylesheets/index.scss";
 import "./icons/fontawesome";
 
-import configureStore from "./store/store";
-// import * as serviceWorker from "./serviceWorker";
 import UserAPI from "./api/UserAPI";
+import configureStore from "./store/store";
+import Root from "./components/app/root";
+
+// import * as serviceWorker from "./serviceWorker";
 
 document.addEventListener("DOMContentLoaded", () => {
   let store;
 
   if (localStorage.jwt) {
     UserAPI.setAuthToken(localStorage.jwt);
-    const user = jwtDecode(localStorage.jwt);
-    const preloadedState = { session: { user: user } };
+    const user = JwtDecode(localStorage.jwt);
+    const preloadedState = {
+      entities: { users: { [user.id]: user } },
+      session: { id: user.id },
+    };
     store = configureStore(preloadedState);
   } else {
     store = configureStore();

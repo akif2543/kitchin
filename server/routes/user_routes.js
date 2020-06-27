@@ -34,22 +34,17 @@ router.post("/login", async (req, res) => {
     const match = await bcrypt.compare(password, found.password);
 
     if (match) {
-      found
-        .select(userSelect)
-        .then((user) => {
-          const payload = { id: found._id, handle: found.handle };
-          jwt.sign(payload, secret, (err, token) => {
-            if (token) {
-              res.status(201).json({
-                token: `Bearer ${token}`,
-                user,
-              });
-            } else {
-              res.status(500).json(err);
-            }
+      const user = found.toJSON();
+      delete user.password;
+      jwt.sign(user, secret, (err, token) => {
+        if (token) {
+          res.status(201).json({
+            token: `Bearer ${token}`,
           });
-        })
-        .catch((e) => res.status(500).send(e));
+        } else {
+          res.status(500).json(err);
+        }
+      });
     } else {
       res.status(400).json({ error: "Invalid email or password" });
     }
@@ -91,7 +86,7 @@ router.get(
   }
 );
 
-router.post("/", async (req, res) => {
+router.post("/register", async (req, res) => {
   const formData = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -118,25 +113,20 @@ router.post("/", async (req, res) => {
       try {
         savedUser = await newUser.save();
       } catch (e) {
-        return res.status(422).json(e);
+        return res.status(400).json(e);
       }
 
-      savedUser
-        .select(userSelect)
-        .then((user) => {
-          const payload = { id: savedUser._id, handle: savedUser.handle };
-          jwt.sign(payload, secret, (err, token) => {
-            if (token) {
-              res.status(201).json({
-                token: `Bearer ${token}`,
-                user,
-              });
-            } else {
-              res.status(500).json(err);
-            }
+      const user = savedUser.toJSON();
+      delete user.password;
+      jwt.sign(user, secret, (err, token) => {
+        if (token) {
+          res.status(201).json({
+            token: `Bearer ${token}`,
           });
-        })
-        .catch((e) => res.status(500).json(e));
+        } else {
+          res.status(500).json(err);
+        }
+      });
     });
   });
 });
