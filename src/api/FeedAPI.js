@@ -1,48 +1,11 @@
+import axios from "axios";
+
 const FeedAPI = {
-  async getPosts(date) {
-    const res = await fetch(
-      `http://localhost:3001/feed/posts${date ? `?date=${date}` : ""}`
-    );
-    return await res.json();
-  },
-  async newPost(body) {
-    const response = await fetch("http://localhost:3001/feed/post", {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer ".concat(sessionStorage.getItem("jwt")),
-      },
-    });
-    return await response.json();
-  },
-  async postToggleable(postId, like) {
-    const response = await fetch("http://localhost:3001/feed/post/toggle", {
-      method: "PUT",
-      body: JSON.stringify({
-        postId: postId,
-        like: like,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer ".concat(sessionStorage.getItem("jwt")),
-      },
-    });
-    return await response.json();
-  },
-  async addComment(postId, body) {
-    let res = await fetch(`http://localhost:3001/feed/post/${postId}/comment`, {
-      method: "POST",
-      body: JSON.stringify({
-        body: body,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer ".concat(sessionStorage.getItem("jwt")),
-      },
-    });
-    return await res.json();
-  },
+  fetchPosts: (date) => axios.get(`/api/feed${date ? `?date=${date}` : ""}`),
+  createPost: (post) => axios.post("/api/feed", post),
+  togglePost: (info) => axios.put("/api/feed/toggle", info),
+  addComment: (comment) => axios.put("/api/feed/comment", comment),
+  toggleComment: (info) => axios.put("/api/feed/comment/like", info),
 };
 
 export default FeedAPI;

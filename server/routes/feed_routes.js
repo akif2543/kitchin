@@ -98,8 +98,8 @@ router.put("/comment/like", (req, res) => {
 });
 
 router.get("/", (req, res) => {
-  const timestamp = req.query.date;
-  const dateFilter = timestamp ? { date: { $lt: new Date(timestamp) } } : null;
+  const { date } = req.query;
+  const dateFilter = date ? { date: { $lt: new Date(date) } } : null;
 
   Post.find(dateFilter)
     .sort({ date: -1 })
