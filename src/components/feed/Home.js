@@ -1,28 +1,9 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 
-import Post from "./Post";
-import NewPost from "../../NewPost";
-import Profile from "./Profile";
-import { fetchPosts } from "../../actions/feed_actions";
-import { getPosts, getCurrentUser } from "../../reducers/selectors/selectors";
+import Profile from "../user/profile";
+import Feed from "./feed";
 
 const Home = () => {
-  const dispatch = useDispatch();
-
-  const user = useSelector((store) => getCurrentUser(store));
-  const posts = useSelector((store) => getPosts(store));
-
-  // const [globalState, dispatch] = useContext(AppContext);
-
-  // const [state, setState] = useState({
-  //   posts: [],
-  //   loading: true,
-  //   loadMore: false,
-  //   timestamp: null,
-  // });
-
   const loadMore = () => {
     // dispatch({ type: LOADING });
     /* if(state.posts.length > 1) {
@@ -43,122 +24,12 @@ const Home = () => {
     // document.documentElement.scrollTop = 0;
   };
 
-  useEffect(() => {
-    dispatch(fetchPosts(null));
-  }, []);
-
   return (
     <div className="Home flex-page">
-      <div className="container col-sm-3">
-        <Profile />
-      </div>
-      <div className="container col-sm-8 feed-container">
-        <NewPost />
-        <h1 id="feed-title">Your Feed</h1>
-        {/* {loading && (
-            <div className="container-fluid loading">
-              <img
-                src="https://image.flaticon.com/icons/png/512/18/18315.png"
-                alt=""
-              />
-              <p>Your feed is cooking!</p>
-            </div>
-          )} */}
-        <div className="container post-container">
-          {posts.map((post) => (
-            <Post
-              key={post._id}
-              _id={post._id}
-              profilePhoto={post.profilePhoto}
-              userName={post.userName}
-              date={post.formatDate}
-              postBody={post.postBody}
-              image={post.image}
-              caption={post.caption}
-              commentButton={<FontAwesomeIcon icon={["far", "comment"]} />}
-              comments={post.comments}
-              likeButton={
-                post.likes.includes(user.id) ? (
-                  <FontAwesomeIcon icon="heart" color={"#E67222"} />
-                ) : (
-                  <FontAwesomeIcon icon={["far", "heart"]} />
-                )
-              }
-              likeStatus={post.likes.includes(user.id) ? true : false}
-              likeCounter={post.likes.length}
-              shareButton={
-                post.shares.includes(user.id) ? (
-                  <FontAwesomeIcon icon="share" color={"#E67222"} />
-                ) : (
-                  <FontAwesomeIcon icon="share" />
-                )
-              }
-              shareStatus={post.shares.includes(user.id) ? true : false}
-              shareCounter={post.shares.length}
-            />
-          ))}
-          {/* {!loading && (
-              <button
-                className="btn btn-danger"
-                onClick={loadMore}
-                href="#feed-title"
-                id="load-more-btn"
-              >
-                Load More
-              </button>
-            )} */}
-        </div>
-      </div>
+      <Profile />
+      <Feed />
     </div>
   );
 };
 
 export default Home;
-
-/* {globalState.signedIn && (
-        <div className="container">
-          {state.posts.map(post => (
-            <Recipe
-              _id={post._id}
-              profilePhoto={post.profilePhoto}
-              userName={post.userName}
-              date={post.date}
-              recipeTitle={post.recipeTitle}
-              prepTime={post.prepTime}
-              cookTime={post.cookTime}
-              recipeDescription={post.recipeDescription}
-              tags={post.tags}
-              image={post.image}
-              caption={post.caption}
-              ingredientList={post.ingredientList}
-              recipeDirections={post.recipeDirections}
-              commentButton={<FontAwesomeIcon icon={["far", "comment"]} />}
-              comments={post.comments.length}
-              likeStatus={
-                post.likes.includes(globalState.id) ? (
-                  <FontAwesomeIcon icon={["far", "heart"]} />
-                ) : (
-                  <FontAwesomeIcon icon={["fas", "heart"]} />
-                )
-              }
-              likes={post.likes.length}
-              shareStatus={
-                post.shares.includes(globalState.id) ? (
-                  <FontAwesomeIcon icon={["far", "share-square"]} />
-                ) : (
-                  <FontAwesomeIcon icon={["fas", "share-square"]} />
-                )
-              }
-              shares={post.shares.length}
-            />
-          ))}
-        </div>
-            )} */
-
-// {
-//           setState({
-//             ...state,
-//             posts: json,
-//             loading: false,
-//           });
-//           setGlobalState({ ...globalState, postsLoaded: true });

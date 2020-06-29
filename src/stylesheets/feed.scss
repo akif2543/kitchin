@@ -1,0 +1,225 @@
+.flex-page {
+  display: flex;
+  justify-content: left;
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+}
+
+.feed-container {
+  top: 60px;
+  margin-bottom: 70px;
+  margin-top: 15px;
+  position: relative;
+
+  #feed-title {
+    transform: translateX(10px);
+    display: inline-block;
+  }
+
+  #compose-btn {
+    float: right;
+    margin-right: 225px;
+    margin-top: 5px;
+    z-index: 5;
+  }
+
+  .new-post {
+    .pp {
+      height: 4rem;
+      width: 4rem;
+      border-radius: 50%;
+      float: left;
+      margin: 0.5rem 0.5rem 0.5rem 0;
+    }
+
+    textarea {
+      width: 394px;
+      height: 5rem;
+      border-radius: 2px;
+      border-color: lightgray;
+      padding: 0;
+      outline: none;
+      resize: none;
+    }
+    .presence-err {
+      border-color: red;
+    }
+
+    label {
+      display: block;
+      margin-left: 4.5rem;
+      margin-bottom: 0;
+    }
+
+    input {
+      width: 394px;
+      margin-left: 4.5rem;
+      outline: none;
+      // border-radius: 2px;
+      // border-color: lightgray;
+    }
+  }
+
+  .post-container {
+    margin: 0;
+  }
+
+  .card {
+    text-align: left;
+    // margin: 0 auto;
+    max-width: 1000px;
+    margin-bottom: 20px;
+
+    .post-btn {
+      background: none;
+      border: none;
+      outline: none;
+
+      &:hover {
+        color: $orange;
+      }
+    }
+
+    .profile-photo {
+      height: 3rem;
+      width: 3rem;
+      border-radius: 50%;
+      float: left;
+      margin-right: 1rem;
+      background: darkgray;
+    }
+
+    .author {
+      @include flex(row, flex-start, flex-start);
+      .post-username {
+        margin-bottom: 0;
+      }
+
+      .post-date {
+        padding-left: 0.5rem;
+      }
+    }
+
+    .post-date {
+      color: gray;
+      margin-top: 0;
+    }
+
+    .post-body {
+      margin-top: 16px;
+    }
+
+    .post-image {
+      background: darkgray;
+      height: auto;
+      width: 100%;
+      border-radius: 25px;
+    }
+
+    .flex-container {
+      padding-top: 10px;
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+
+      .count {
+        margin-left: 0.5rem;
+        margin-right: 1.5rem;
+      }
+
+      #comments-icon {
+        margin-right: 0.5rem;
+      }
+    }
+
+    .comments {
+      margin-top: 1rem;
+      border: 1px solid rgba(0, 0, 0, 0.125);
+      border-radius: 0.25rem;
+
+      .comment {
+        @include flex(column);
+        border: none;
+        border: {
+          radius: 0;
+          bottom: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+        margin-bottom: 0;
+        padding: 1rem 1.25rem;
+        max-height: fit-content;
+
+        header {
+          width: 100%;
+          .profile-photo {
+            height: 3rem;
+            width: 3rem;
+            border-radius: 50%;
+            float: left;
+            margin-right: 1rem;
+            background: darkgray;
+          }
+
+          .author {
+            height: fit-content;
+            .post-username {
+              margin-bottom: 0;
+              display: inline-block;
+            }
+            .post-date {
+              transform: translateY(-3px);
+            }
+          }
+
+          .post-date {
+            color: gray;
+            margin-top: 0;
+            transform: translateY(-10px);
+          }
+        }
+
+        .count {
+          margin-left: 0.5rem;
+          margin-right: 1.5rem;
+        }
+
+        &:last-of-type {
+          border-bottom: none;
+        }
+      }
+    }
+
+    .add-comment {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: $bg;
+      border-radius: 0.25rem;
+
+      form {
+        @include flex(row, flex-start, center);
+        textarea {
+          width: 100%;
+          padding: 5px 7px;
+          border-color: lightgray;
+          outline: none;
+          resize: none;
+        }
+
+        .presence-err {
+          border-color: red;
+        }
+
+        .sub-com {
+          height: 100%;
+          color: $orange;
+          margin: 0.75rem;
+        }
+      }
+    }
+  }
+}
+
+// #edit:hover {
+//   color: #e67222;
+// }

@@ -70,8 +70,19 @@ router.put(
     User.findByIdAndUpdate(req.user.id, profileData, {
       new: true,
     })
-      .populate(userSelect)
-      .then((user) => res.status(200).json(user))
+      .then((updated) => {
+        const user = updated.toJSON();
+        delete user.password;
+        jwt.sign(user, secret, (err, token) => {
+          if (token) {
+            res.status(200).json({
+              token: `Bearer ${token}`,
+            });
+          } else {
+            res.status(500).json(err);
+          }
+        });
+      })
       .catch((e) => res.status(404).json(e));
   }
 );

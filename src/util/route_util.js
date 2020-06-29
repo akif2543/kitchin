@@ -2,32 +2,29 @@ import React from "react";
 import { Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
-import Navbar from "../components/navbar/navbar";
-import Footer from "../components/navbar/footer";
+// const links = [
+//   {
+//     label: "Home",
+//     path: "./Home",
+//   },
+//   {
+//     label: "About",
+//     path: "./About",
+//   },
+// ];
 
-const links = [
-  {
-    label: "Home",
-    path: "./Home",
-  },
-  {
-    label: "About",
-    path: "./About",
-  },
-];
-
-const LayoutRoute = ({ path, render, exact }) => {
-  return (
-    <div>
-      <Navbar links={links} />
-      <Route path={path} exact={exact} render={render} />
-      <Footer links={links} />
-    </div>
-  );
-};
+// const LayoutRoute = ({ path, render, exact }) => {
+//   return (
+//     <div>
+//       <Navbar links={links} />
+//       <Route path={path} exact={exact} render={render} />
+//       <Footer links={links} />
+//     </div>
+//   );
+// };
 
 const Auth = ({ component: Component, path, loggedIn, exact }) => (
-  <LayoutRoute
+  <Route
     path={path}
     exact={exact}
     render={(props) =>
@@ -37,10 +34,10 @@ const Auth = ({ component: Component, path, loggedIn, exact }) => (
 );
 
 const Protected = ({ component: Component, loggedIn, ...rest }) => (
-  <LayoutRoute
+  <Route
     {...rest}
     render={(props) =>
-      loggedIn ? <Component {...props} /> : <Redirect to="/login" />
+      loggedIn ? <Component {...props} /> : <Redirect to="/" />
     }
   />
 );

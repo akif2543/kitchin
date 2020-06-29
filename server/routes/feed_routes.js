@@ -99,10 +99,10 @@ router.put("/comment/like", (req, res) => {
 
 router.get("/", (req, res) => {
   const { date } = req.query;
-  const dateFilter = date ? { date: { $lt: new Date(date) } } : null;
+  const dateFilter = date ? { createdAt: { $lt: new Date(date) } } : null;
 
   Post.find(dateFilter)
-    .sort({ date: -1 })
+    .sort({ createdAt: -1 })
     .limit(5)
     .populate(postPop)
     .then((posts) => res.status(200).json(posts))

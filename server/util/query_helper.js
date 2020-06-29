@@ -1,4 +1,4 @@
-const USER_SELECT = "-email -password -_id";
+const USER_SELECT = "-email -password";
 
 const queryHelper = {
   userSelect: USER_SELECT,

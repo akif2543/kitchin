@@ -7,7 +7,7 @@ import {
 import {
   faHeart as faHeartSolid,
   faShareSquare as faShareSquareSolid,
-  // faComment as faCommentSolid,
+  faComment as faCommentSolid,
   faShare,
   faSpinner,
   faQuestionCircle,
@@ -36,7 +36,7 @@ library.add(
   faHeartSolid,
   faShareSquareSolid,
   faShareSquareRegular,
-  // faCommentSolid,
+  faCommentSolid,
   faComment,
   faShare,
   faSpinner,

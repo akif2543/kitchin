@@ -9,7 +9,7 @@ export const RECEIVE_FEED_ERROR = "RECEIVE_FEED_ERROR";
 
 const receivePost = (post) => ({
   type: RECEIVE_POST,
-  post,
+  ...post,
 });
 
 const receivePosts = (posts) => ({

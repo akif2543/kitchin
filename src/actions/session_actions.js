@@ -67,3 +67,8 @@ export const fetchUser = (handle) => (dispatch) =>
   UserAPI.fetchUser(handle)
     .then((user) => dispatch(receiveUser(normalize(user, userSchema))))
     .catch((e) => dispatch(receiveUserErrors(e.response.data)));
+
+export const updateProfile = (profile) => (dispatch) =>
+  UserAPI.updateProfile(profile)
+    .then((res) => dispatch(receiveCurrentUser(getUser(res))))
+    .catch((e) => dispatch(receiveSessionErrors(e.response.data)));

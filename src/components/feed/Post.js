@@ -1,150 +1,131 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-// import AppContext from "./context/AppContext";
-import Comment from "./Comment";
-import NewComment from "./NewComment";
-// import FeedAPI from "./api/FeedAPI";
-import { togglePost } from "../../context/actions";
+import Comment from "./comment";
+import NewComment from "./new_comment";
 
-const Post = ({
-  _id,
-  profilePhoto,
-  userName,
-  date,
-  image,
-  postBody,
-  caption,
-  comments,
-  likeButton,
-  likeStatus,
-  likeCounter,
-  shareButton,
-  shareStatus,
-  shareCounter,
-}) => {
-  const [state, setState] = useState({
-    likeButton: likeButton,
-    likeStatus: likeStatus,
-    shareButton: shareButton,
-    shareStatus: shareStatus,
-    commentsOpen: false,
-  });
+import { getCurrentUser } from "../../reducers/selectors/selectors";
+import { togglePost } from "../../actions/feed_actions";
 
+const Post = ({ p }) => {
   const dispatch = useDispatch();
+  const user = useSelector((store) => getCurrentUser(store));
+  const [showComments, setShowComments] = useState(false);
 
-  // const [globalState, dispatch] = useContext(AppContext);
+  const hasLiked = p.likes.some((u) => u._id === user.id);
+  const hasShared = p.shares.some((u) => u._id === user.id);
 
-  const handleCommentsToggle = () => {
-    setState({ ...state, commentsOpen: !state.commentsOpen });
+  const toggleComments = () => setShowComments(!showComments);
+
+  const handleToggle = (type) => () =>
+    dispatch(togglePost({ postId: p._id, like: type === "like" }));
+
+  const dateDiff = (date) => {
+    const now = Date.now();
+    const messageDate = date.getTime();
+    return Math.floor((now - messageDate) / (24 * 3600 * 1000));
   };
 
-  const like = () => {
-    setState({
-      ...state,
-      likeButton: <FontAwesomeIcon icon="spinner" spin />,
-    });
-    dispatch(togglePost(_id, true));
-    // FeedAPI.postToggleable(_id, true)
-    //   .then((post) => {
-    //     if (state.likeStatus) {
-    //       setState({
-    //         ...state,
-    //         likeButton: <FontAwesomeIcon icon={["far", "heart"]} />,
-    //         likeStatus: false,
-    //       });
-    //       // setGlobalState({ ...globalState, postsLoaded: false });
-    //     } else if (!state.likeStatus) {
-    //       setState({
-    //         ...state,
-    //         likeButton: <FontAwesomeIcon icon="heart" color={"#E67222"} />,
-    //         likeStatus: true,
-    //       });
-    //       // setGlobalState({ ...globalState, postsLoaded: false });
-    //     }
-    //     dispatch({ type: UPDATE_POST, post });
-    // })
-    // .catch((e) => console.log("error", e));
+  const formatDate = (date) => {
+    const mDate = new Date(date);
+    const diff = dateDiff(mDate);
+
+    switch (diff) {
+      case 0:
+        return `Today at ${mDate.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}`;
+      case 1:
+        return `Yesterday at ${mDate.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}`;
+      default:
+        return mDate.toLocaleDateString();
+    }
   };
 
-  const share = async () => {
-    setState({
-      ...state,
-      shareButton: <FontAwesomeIcon icon="spinner" spin />,
-    });
-    dispatch(togglePost(_id, false));
-    // FeedAPI.postToggleable(_id, false)
-    //   .then((post) => {
-    //     if (state.shareStatus) {
-    //       setState({
-    //         ...state,
-    //         shareButton: <FontAwesomeIcon icon="share" />,
-    //         shareStatus: false,
-    //       });
-    //       // setGlobalState({ ...globalState, postsLoaded: false });
-    //     } else if (!state.shareStatus) {
-    //       setState({
-    //         ...state,
-    //         shareButton: <FontAwesomeIcon icon="share" color={"#E67222"} />,
-    //         shareStatus: true,
-    //       });
-    //       // setGlobalState({ ...globalState, postsLoaded: false });
-    //     }
-    //     dispatch({ type: UPDATE_POST, post });
-    //   })
-    //   .catch((e) => console.log("error", e));
-  };
+  const likeBtn = hasLiked ? (
+    <FontAwesomeIcon icon="heart" color={"#E67222"} />
+  ) : (
+    <FontAwesomeIcon icon={["far", "heart"]} />
+  );
+
+  const shareBtn = hasShared ? (
+    <FontAwesomeIcon icon="share" color={"#E67222"} />
+  ) : (
+    <FontAwesomeIcon icon="share" />
+  );
+
+  // const spin = <FontAwesomeIcon icon="spinner" spin />;
 
   return (
     <div className="card w-75 post">
       <div className="card-body">
-        <img src={profilePhoto} className="profile-photo" alt="" />
-        <h5 className="card-title post-username">{userName}</h5>
-        <span className="card-text post-date">{date}</span>
-        <p className="card-text post-body">{postBody}</p>
-        <img src={image} alt={caption} className="post-image" />
+        <img src={p.author.avatar} className="profile-photo" alt="" />
+        <div className="author">
+          <h5 className="card-title post-username">{p.author.name}</h5>
+          <span className="card-text post-date">@{p.author.handle}</span>
+        </div>
+        <span className="card-text post-date">{formatDate(p.createdAt)}</span>
+        <p className="card-text post-body">{p.body}</p>
+        {p.image && <img src={p.image} alt="" className="post-image" />}
         <div className="flex-container">
-          <button href="#" onClick={like}>
-            {state.likeButton}
+          <button onClick={handleToggle("like")} className="post-btn">
+            {likeBtn}
           </button>
-          <span className="card-text count">{likeCounter}</span>
-          <button href="#" onClick={share}>
-            {state.shareButton}
+          <span className="card-text count">{p.likes.length}</span>
+          <button href="#" onClick={handleToggle("share")} className="post-btn">
+            {shareBtn}
           </button>
-          <span className="card-text count">{shareCounter}</span>
-          <NewComment postId={_id} />
-          <span className="card-text count">{comments.length}</span>
+          <span className="card-text count">{p.shares.length}</span>
           <button
-            type="button"
-            className="tooltip-test"
-            title="View comments"
+            className="tooltip-test post-btn"
+            title="Add a comment"
             data-toggle="collapse"
-            data-target={`#comments-${_id.slice(_id.length - 5)}`}
+            data-target={`#add-comment-${p._id.slice(p._id.length - 5)}`}
             aria-expanded="false"
             aria-controls="comment"
-            disabled={!comments.length}
-            onClick={handleCommentsToggle}
+            id={`toggle-com-${p._id.slice(p._id.length - 5)}`}
           >
-            {state.commentsOpen ? (
+            <FontAwesomeIcon icon={["far", "comment"]} />
+          </button>
+          <span className="card-text count">{p.comments.length}</span>
+          <button
+            type="button"
+            className="tooltip-test post-btn"
+            title="View comments"
+            data-toggle="collapse"
+            data-target={`#comments-${p._id.slice(p._id.length - 5)}`}
+            aria-expanded="false"
+            aria-controls="comments"
+            disabled={!p.comments.length}
+            onClick={toggleComments}
+          >
+            {showComments ? (
               <FontAwesomeIcon icon="angle-up" id="comments-icon" />
             ) : (
               <FontAwesomeIcon icon="angle-down" id="comments-icon" />
             )}
           </button>
         </div>
-        <div className="collapse" id={`comments-${_id.slice(_id.length - 5)}`}>
-          {comments.map((comment) => (
+        <div
+          className="collapse comments"
+          id={`comments-${p._id.slice(p._id.length - 5)}`}
+        >
+          {p.comments.map((c) => (
             <Comment
-              key={comment._id}
-              user={comment.userId}
-              date={comment.date}
-              body={comment.body}
-              likes={comments.likes}
-              show={state.commentsOpen}
+              c={c}
+              postId={p._id}
+              user={user}
+              format={formatDate}
+              key={c._id}
             />
           ))}
         </div>
+        <NewComment id={p._id} user={user} />
       </div>
     </div>
   );

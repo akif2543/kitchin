@@ -1,0 +1,119 @@
+.col-sm-4 {
+  padding: 0;
+  max-width: 100%;
+}
+
+.profile {
+  margin: 50px auto;
+  top: 60px;
+  width: 18rem;
+
+  .photo {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    background: darkgray;
+    margin: 10px 44px;
+    border: none;
+  }
+
+  .username {
+    text-align: center;
+  }
+
+  .city {
+    margin-right: 10px;
+    color: $orange;
+  }
+
+  .utensils {
+    margin-right: 17px;
+    color: $orange;
+  }
+
+  .briefcase {
+    margin-right: 14px;
+    color: $orange;
+  }
+
+  .bio-title {
+    margin-top: 20px;
+    display: inline-block;
+  }
+
+  .list-group-item {
+    padding-left: 0;
+  }
+
+  .profile-edit {
+    display: inline-block;
+    margin-left: 10px;
+    margin-bottom: 1px;
+
+    background: none;
+    border: none;
+    outline: none;
+
+    &:hover {
+      color: $orange;
+    }
+  }
+}
+
+.registration-form-item {
+  #bio {
+    height: 10rem;
+    resize: none;
+  }
+}
+
+.mobile-profile {
+  top: 60px;
+  margin: 20px 0;
+  padding: 20px;
+  display: none;
+
+  .photo {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    background: darkgray;
+    border: none;
+    float: left;
+    margin-right: 2rem;
+  }
+
+  .card-body {
+    display: inline-block;
+    width: 100%;
+    padding: 0;
+
+    h2 {
+      margin-bottom: 0;
+      margin-top: 12px;
+    }
+
+    .mobile-profile-btn {
+      background-color: none;
+      color: gray;
+      border: none;
+      outline: none;
+      padding: 0;
+      &:hover {
+        color: $orange;
+      }
+
+      .mobile-profile-icon {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+
+  .collapse {
+    margin-top: 20px;
+
+    .list-group-item {
+      padding-left: 0;
+    }
+  }
+}

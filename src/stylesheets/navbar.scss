@@ -34,6 +34,7 @@
     .nav-user {
       @include flex(row, flex-start, center);
       padding-right: 0;
+      white-space: nowrap;
 
       #navatar {
         border-radius: 50%;
@@ -44,7 +45,7 @@
 
       h3 {
         margin-bottom: 0;
-        font-size: 24px;
+        font-size: 18px;
       }
     }
   }

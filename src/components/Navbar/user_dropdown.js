@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getCurrentUser } from "../../reducers/selectors/selectors";
 import { logout } from "../../actions/session_actions";
 
-const UserDropdown = ({ history }) => {
+const UserDropdown = () => {
   const currentUser = useSelector((store) => getCurrentUser(store));
   const dispatch = useDispatch();
   const handleClick = () => dispatch(logout());
