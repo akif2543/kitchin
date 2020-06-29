@@ -1,21 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import debounce from "lodash.debounce";
 
 import Post from "./post";
 import NewPost from "./new_post";
 import { fetchPosts } from "../../actions/feed_actions";
-import { getPosts, getCurrentUser } from "../../reducers/selectors/selectors";
+import { getPosts } from "../../reducers/selectors/selectors";
 
 const Feed = (props) => {
   const dispatch = useDispatch();
 
-  // const user = useSelector((store) => getCurrentUser(store));
   const posts = useSelector((store) => getPosts(store));
+  const [last, setLast] = useState(1);
+  const [load, setLoad] = useState(false);
+
+  const date = posts.length ? posts[posts.length - 1].createdAt : null;
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+      document.documentElement.offsetHeight
+    )
+      return;
+    setLoad(true);
+    setTimeout(() => setLoad(false), 2000);
+  };
 
   useEffect(() => {
-    dispatch(fetchPosts(null));
+    loadPosts();
+    window.addEventListener("scroll", debounce(handleScroll));
+    return () => window.removeEventListener("scroll", debounce(handleScroll));
   }, []);
+
+  useEffect(() => {
+    if (!load) return;
+    if (date === last) return;
+    loadPosts();
+  }, [load]);
+
+  const loadPosts = () => {
+    setLast(date);
+    dispatch(fetchPosts(date));
+  };
 
   return (
     <div className="container col-sm-8 feed-container">
@@ -42,37 +69,7 @@ const Feed = (props) => {
           )} */}
       <div className="container post-container">
         {posts.map((post) => (
-          <Post
-            key={post._id}
-            p={post}
-            // id={post._id}
-            // profilePhoto={post.profilePhoto}
-            // userName={post.userName}
-            // date={post.formatDate}
-            // postBody={post.postBody}
-            // image={post.image}
-            // caption={post.caption}
-            // commentButton={<FontAwesomeIcon icon={["far", "comment"]} />}
-            // comments={post.comments}
-            // likeButton={
-            //   post.likes.includes(user.id) ? (
-            //     <FontAwesomeIcon icon="heart" color={"#E67222"} />
-            //   ) : (
-            //     <FontAwesomeIcon icon={["far", "heart"]} />
-            //   )
-            // }
-            // likeStatus={post.likes.includes(user.id) ? true : false}
-            // likeCounter={post.likes.length}
-            // shareButton={
-            //   post.shares.includes(user.id) ? (
-            //     <FontAwesomeIcon icon="share" color={"#E67222"} />
-            //   ) : (
-            //     <FontAwesomeIcon icon="share" />
-            //   )
-            // }
-            // shareStatus={post.shares.includes(user.id) ? true : false}
-            // shareCounter={post.shares.length}
-          />
+          <Post key={post._id} p={post} />
         ))}
         {/* {!loading && (
               <button

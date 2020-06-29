@@ -13,16 +13,6 @@ import { connect } from "react-redux";
 //   },
 // ];
 
-// const LayoutRoute = ({ path, render, exact }) => {
-//   return (
-//     <div>
-//       <Navbar links={links} />
-//       <Route path={path} exact={exact} render={render} />
-//       <Footer links={links} />
-//     </div>
-//   );
-// };
-
 const Auth = ({ component: Component, path, loggedIn, exact }) => (
   <Route
     path={path}
