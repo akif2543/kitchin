@@ -70,7 +70,7 @@ const RegistrationForm = ({ history }) => {
   return (
     <div className="registration">
       <button
-        className="btn btn-danger btn-lg"
+        className="btn btn-danger btn-lg reg-modal-trigger"
         data-toggle="modal"
         data-target="#sign-up"
       >

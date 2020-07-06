@@ -1,4 +1,5 @@
 require("dotenv").config();
+const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
@@ -27,6 +28,13 @@ mongoose
     console.log("error", err);
   });
 mongoose.set("useFindAndModify", false);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("build"));
+  app.get("/", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "build", "index.html"));
+  });
+}
 
 app.use("/api", apiRoutes);
 

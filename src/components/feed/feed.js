@@ -29,8 +29,9 @@ const Feed = (props) => {
 
   useEffect(() => {
     loadPosts();
-    window.addEventListener("scroll", debounce(handleScroll));
-    return () => window.removeEventListener("scroll", debounce(handleScroll));
+    window.addEventListener("scroll", debounce(handleScroll, 150));
+    return () =>
+      window.removeEventListener("scroll", debounce(handleScroll, 150));
   }, []);
 
   useEffect(() => {

@@ -34,7 +34,7 @@ const Footer = () => {
                 </a>
               </li>
               <li className="list-inline-item">
-                <a href="#">
+                <a href="https://angel.co/u/akif-saifi">
                   <FontAwesomeIcon icon={["fab", "angellist"]} size="lg" />
                 </a>
               </li>
