@@ -25,12 +25,12 @@
     "shortid": "^2.2.15"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "npm start --prefix server",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server-install": "npm install --prefix server",
-    "server": "npm start --prefix server",
+    "server": "npm run server --prefix server",
     "dev": "concurrently \"npm run start\" \"npm run server\"",
     "debug": "npm run debug --prefix server",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix server && npm run build"
